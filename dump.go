@@ -147,6 +147,13 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 	}
 }
 
+func IsZeroValue(v reflect.Value) bool {
+	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() {
+		return false
+	}
+	return reflect.Zero(v.Type()).Interface() == v.Interface()
+}
+
 // dump is the main workhorse for dumping a value.  It uses the passed reflect
 // value to figure out what kind of object we are dealing with and formats it
 // appropriately.  It is a recursive function, however circular data structures
@@ -267,13 +274,15 @@ func (d *dumpState) dump(v reflect.Value) {
 			vt := v.Type()
 			numFields := v.NumField()
 			for i := 0; i < numFields; i++ {
-				d.indent()
-				vtf := vt.Field(i)
-				d.w.Write([]byte(vtf.Name))
-				d.w.Write(colonSpaceBytes)
-				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.Field(i)))
-				d.w.Write(commaNewlineBytes)
+				if !IsZeroValue(d.unpackValue(v.Field(i))) {
+					d.indent()
+					vtf := vt.Field(i)
+					d.w.Write([]byte(vtf.Name))
+					d.w.Write(colonSpaceBytes)
+					d.ignoreNextIndent = true
+					d.dump(d.unpackValue(v.Field(i)))
+					d.w.Write(commaNewlineBytes)
+				}
 			}
 		}
 		d.depth--
