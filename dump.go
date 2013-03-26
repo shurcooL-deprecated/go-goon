@@ -257,6 +257,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write(closeBraceBytes)
 
 	case reflect.Struct:
+		d.w.Write([]byte(v.Type().String()))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
