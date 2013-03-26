@@ -38,3 +38,21 @@ func TestFirst(t *testing.T) {
 		t.Errorf("goon.Sdump(%#v) = %v, want %v", x, got, want)
 	}
 }
+
+// TODO: Next step, refactor the common parts out
+func TestSecond(t *testing.T) {
+	x := []int{
+		5,
+		3,
+	}
+
+	want := `[]int{
+	5,
+	3,
+}
+`
+
+	if got := goon.Sdump(x); got != want {
+		t.Errorf("goon.Sdump(%#v) = %v, want %v", x, got, want)
+	}
+}

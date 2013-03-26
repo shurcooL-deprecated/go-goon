@@ -146,11 +146,7 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 	// Recursively call dump for each item.
 	for i := 0; i < numEntries; i++ {
 		d.dump(d.unpackValue(v.Index(i)))
-		if i < (numEntries - 1) {
-			d.w.Write(commaNewlineBytes)
-		} else {
-			d.w.Write(newlineBytes)
-		}
+		d.w.Write(commaNewlineBytes)
 	}
 }
 
@@ -223,6 +219,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		printComplex(d.w, v.Complex(), 64)
 
 	case reflect.Array, reflect.Slice:
+		d.w.Write([]byte(v.Type().String()))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -382,7 +379,7 @@ func Gofmt2(x string) []byte {
 		buf.Write(newlineBytes)
 		return buf.Bytes()
 	}
-	return nil
+	return []byte("gofmt error.\n" + x)
 }
 
 // Actually executes gofmt binary as a new process
