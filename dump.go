@@ -169,10 +169,6 @@ func (d *dumpState) dump(v reflect.Value) {
 	// Print type information unless already handled elsewhere.
 	if !d.ignoreNextType {
 		d.indent()
-		d.w.Write(openParenBytes)
-		d.w.Write([]byte(v.Type().String()))
-		d.w.Write(closeParenBytes)
-		d.w.Write(spaceBytes)
 	}
 	d.ignoreNextType = false
 
