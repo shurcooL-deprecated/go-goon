@@ -272,11 +272,7 @@ func (d *dumpState) dump(v reflect.Value) {
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
 				d.dump(d.unpackValue(v.Field(i)))
-				if i < (numFields - 1) {
-					d.w.Write(commaNewlineBytes)
-				} else {
-					d.w.Write(newlineBytes)
-				}
+				d.w.Write(commaNewlineBytes)
 			}
 		}
 		d.depth--
