@@ -340,10 +340,21 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 	}
 }
 
-func Dump(a ...interface{}) {
+// Dumps to []byte
+func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	os.Stdout.Write(Gofmt2(buf.String()))
+	return Gofmt2(buf.String())
+}
+
+// Dumps to string
+func Sdump(a ...interface{}) string {
+	return string(bdump(a...))
+}
+
+// Dumps to stdout
+func Dump(a ...interface{}) {
+	os.Stdout.Write(bdump(a...))
 }
 
 // Noop
