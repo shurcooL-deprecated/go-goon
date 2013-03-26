@@ -51,6 +51,4 @@ type ConfigState struct {
 	ContinueOnMethod bool
 }
 
-// Config is the active configuration of the top-level functions.
-// The configuration can be changed by modifying the contents of spew.Config.
-var Config ConfigState = ConfigState{Indent: "\t"}
+var config ConfigState = ConfigState{Indent: "\t"}
