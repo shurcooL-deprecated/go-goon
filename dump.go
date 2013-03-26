@@ -87,22 +87,7 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	}
 
 	// Display type information.
-	d.w.Write(openParenBytes)
-	d.w.Write(bytes.Repeat(asteriskBytes, indirects))
-	d.w.Write([]byte(ve.Type().String()))
-	d.w.Write(closeParenBytes)
-
-	// Display pointer information.
-	if len(pointerChain) > 0 {
-		d.w.Write(openParenBytes)
-		for i, addr := range pointerChain {
-			if i > 0 {
-				d.w.Write(pointerChainBytes)
-			}
-			printHexPtr(d.w, addr)
-		}
-		d.w.Write(closeParenBytes)
-	}
+	d.w.Write(bytes.Repeat(ampersandBytes, indirects))
 
 	// Display dereferenced value.
 	d.w.Write(openParenBytes)
