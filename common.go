@@ -61,6 +61,7 @@ var (
 	openBraceNewlineBytes = []byte("{\n")
 	closeBraceBytes       = []byte("}")
 	asteriskBytes         = []byte("*")
+	ampersandBytes        = []byte("&")
 	colonBytes            = []byte(":")
 	colonSpaceBytes       = []byte(": ")
 	openParenBytes        = []byte("(")
