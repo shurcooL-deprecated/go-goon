@@ -9,6 +9,13 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"go/parser"
+	"go/printer"
+	"go/token"
+	"go/ast"
+
+	"os/exec"
 )
 
 // dumpState contains information about the state of a dump operation.
@@ -327,5 +334,51 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 }
 
 func Dump(a ...interface{}) {
-	fdump(&Config, os.Stdout, a...)
+	var buf bytes.Buffer
+	fdump(&config, &buf, a...)
+	os.Stdout.Write(Gofmt2(buf.String()))
+}
+
+// Noop
+func Gofmt0(str string) []byte {
+	return []byte(str)
+}
+
+func Gofmt1(str string) []byte {
+	if expr, err := parser.ParseExpr(str); nil == err {
+		var buf bytes.Buffer
+		// This loses the formatting spacing information due to NewFileSet
+		printer.Fprint(&buf, token.NewFileSet(), expr)
+		return buf.Bytes()
+	}
+	return nil
+}
+
+// Mimics gofmt's default internal behaviour
+func Gofmt2(x string) []byte {
+	fset := token.NewFileSet()
+	if file, err := parser.ParseFile(fset, "", "package p;func _(){_=\n//line :1\n"+x+"\n;}", 0); nil == err {
+		var buf bytes.Buffer
+		// The following printer.Config tries to mimic the (current) default gofmt behaviour
+		(&printer.Config{Mode: printer.UseSpaces | printer.TabIndent, Tabwidth: 8}).Fprint(&buf, fset, file.Decls[0].(*ast.FuncDecl).Body.List[0].(*ast.AssignStmt).Rhs[0])
+		buf.Write(newlineBytes)
+		return buf.Bytes()
+	}
+	return nil
+}
+
+// Actually executes gofmt binary as a new process
+func Gofmt3(str string) []byte {
+	// TODO: The gofmt path is hardcoded, this is bad
+	cmd := exec.Command("/usr/local/go/bin/gofmt")
+
+	// TODO: Error checking and other niceness
+	// http://stackoverflow.com/questions/13432947/exec-external-program-script-and-detect-if-it-requests-user-input
+	in, _ := cmd.StdinPipe()
+    in.Write([]byte(str))
+    in.Close()
+
+	data, _ := cmd.Output()
+	//if len(data) > 0 && '\n' == data[len(data) - 1] { data = data[0:len(data)-1]}
+	return data
 }
