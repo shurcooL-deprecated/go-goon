@@ -271,7 +271,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write(closeBraceBytes)
 
 	case reflect.Struct:
-		d.w.Write([]byte(v.Type().String()[len("main."):]))		// TODO: Assumes main package always present, panics otherwise
+		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -312,6 +312,13 @@ func (d *dumpState) dump(v reflect.Value) {
 			fmt.Fprintf(d.w, "%v", v.String())
 		}
 	}
+}
+
+func TypeStringWithoutPackagePrefix(v reflect.Value) string {
+	//return v.Type().String()[len(v.Type().PkgPath()) + 1:]		// TODO: Error checking?
+	//return v.Type().PkgPath()
+	//return v.Type().String()
+	return v.Type().Name()
 }
 
 // fdump is a helper function to consolidate the logic from the various public
