@@ -90,7 +90,6 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	d.w.Write(bytes.Repeat(ampersandBytes, indirects))
 
 	// Display dereferenced value.
-	d.w.Write(openParenBytes)
 	switch {
 	case nilFound == true:
 		d.w.Write(nilAngleBytes)
@@ -102,7 +101,6 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 		d.ignoreNextType = true
 		d.dump(ve)
 	}
-	d.w.Write(closeParenBytes)
 }
 
 // dumpSlice handles formatting of arrays and slices.  Byte (uint8 under
