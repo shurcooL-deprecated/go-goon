@@ -16,7 +16,15 @@ import (
 	"go/ast"
 
 	"os/exec"
+
+	//. "gist.github.com/5258650.git"
+	//"runtime/debug"
 )
+
+var _ ast.Ident
+
+//var _ = debug.Stack()
+//var _ = GetLines("")
 
 // dumpState contains information about the state of a dump operation.
 type dumpState struct {
@@ -99,7 +107,7 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	// Display dereferenced value.
 	switch {
 	case nilFound == true:
-		d.w.Write(nilAngleBytes)
+		d.w.Write(nilBytes)
 
 	case cycleFound == true:
 		d.w.Write(circularBytes)
@@ -151,7 +159,7 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 }
 
 func IsZeroValue(v reflect.Value) bool {
-	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() {
+	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface()/* || reflect.Slice == v.Kind()*/ {
 		return false
 	}
 	return reflect.Zero(v.Type()).Interface() == v.Interface()
@@ -236,7 +244,9 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write([]byte(strconv.Quote(v.String())))
 
 	case reflect.Interface:
-		// Do nothing.  We should never get here due to unpackValue calls.
+		// If we got here, it's because interface is nil
+		// See https://github.com/davecgh/go-spew/issues/12
+		d.w.Write(nilBytes)
 
 	case reflect.Ptr:
 		// Do nothing.  We should never get here since pointers have already
@@ -278,14 +288,20 @@ func (d *dumpState) dump(v reflect.Value) {
 			vt := v.Type()
 			numFields := v.NumField()
 			for i := 0; i < numFields; i++ {
-				if !IsZeroValue(d.unpackValue(v.Field(i))) {
+				//if !IsZeroValue(d.unpackValue(v.Field(i))) {
+				if true {
 					d.indent()
 					vtf := vt.Field(i)
 					d.w.Write([]byte(vtf.Name))
 					d.w.Write(colonSpaceBytes)
 					d.ignoreNextIndent = true
 					d.dump(d.unpackValue(v.Field(i)))
-					d.w.Write(commaNewlineBytes)
+					d.w.Write(commaBytes)
+					d.w.Write([]byte("\t// "))
+					d.w.Write(openParenBytes)
+					d.w.Write([]byte(d.unpackValue(v.Field(i)).Type().String()))
+					d.w.Write(closeParenBytes)
+					d.w.Write(newlineBytes)
 				}
 			}
 		}
@@ -315,7 +331,22 @@ func TypeStringWithoutPackagePrefix(v reflect.Value) string {
 	//return v.Type().String()[len(v.Type().PkgPath()) + 1:]		// TODO: Error checking?
 	//return v.Type().PkgPath()
 	//return v.Type().String()
-	return v.Type().Name()
+	//return v.Type().Name()
+	
+	x := v.Type().String()
+	if strings.HasPrefix(x, "main.") {
+		return x[len("main."):]
+	}
+	return x
+
+	/*x = string(debug.Stack())//GetLine(string(debug.Stack()), 0)
+	//x = x[1:strings.Index(x, ":")]
+	//spew.Printf(">%s<\n", x)
+	//panic(nil)
+	//st := string(debug.Stack())
+	//debug.PrintStack()
+
+	return x*/
 }
 
 // fdump is a helper function to consolidate the logic from the various public
@@ -341,7 +372,7 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	return Gofmt2(buf.String())
+	return Gofmt3(buf.String())
 }
 
 // Dumps to string
@@ -359,6 +390,7 @@ func Gofmt0(str string) []byte {
 	return []byte(str)
 }
 
+// TODO: Replace with go1.1's go/format
 func Gofmt1(str string) []byte {
 	if expr, err := parser.ParseExpr(str); nil == err {
 		var buf bytes.Buffer
@@ -369,19 +401,25 @@ func Gofmt1(str string) []byte {
 	return nil
 }
 
+// TODO: Replace with go1.1's go/format
 // Mimics gofmt's default internal behaviour
 func Gofmt2(x string) []byte {
 	fset := token.NewFileSet()
-	if file, err := parser.ParseFile(fset, "", "package p;func _(){_=\n//line :1\n"+x+"\n;}", 0); nil == err {
+	// Ok I give up basically reimplementing private code of gofmt here, useless work cuz go1.1 will have go/format
+	// So I'll just use gofmt binary for now
+	if file, err := parser.ParseFile(fset, "", "package p; func _() {" + x + "}", parser.ParseComments); nil == err {
 		var buf bytes.Buffer
 		// The following printer.Config tries to mimic the (current) default gofmt behaviour
-		(&printer.Config{Mode: printer.UseSpaces | printer.TabIndent, Tabwidth: 8}).Fprint(&buf, fset, file.Decls[0].(*ast.FuncDecl).Body.List[0].(*ast.AssignStmt).Rhs[0])
+		(&printer.Config{Mode: printer.UseSpaces | printer.TabIndent, Tabwidth: 8}).Fprint(&buf, fset, file)
 		buf.Write(newlineBytes)
 		return buf.Bytes()
+	} else {
+		panic(err)
 	}
-	return []byte("gofmt error.\n" + x)
+	return []byte("gofmt error!\n" + x)
 }
 
+// TODO: Replace with go1.1's go/format
 // Actually executes gofmt binary as a new process
 func Gofmt3(str string) []byte {
 	// TODO: The gofmt path is hardcoded, this is bad
@@ -393,7 +431,10 @@ func Gofmt3(str string) []byte {
     in.Write([]byte(str))
     in.Close()
 
-	data, _ := cmd.Output()
+	data, err := cmd.Output()
+	if nil != err {
+		return []byte("gofmt error!\n" + str)
+	}
 	//if len(data) > 0 && '\n' == data[len(data) - 1] { data = data[0:len(data)-1]}
 	return data
 }

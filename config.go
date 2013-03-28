@@ -51,4 +51,4 @@ type ConfigState struct {
 	ContinueOnMethod bool
 }
 
-var config ConfigState = ConfigState{Indent: "\t"}
+var config ConfigState = ConfigState{Indent: "\t", DisableMethods: true}
