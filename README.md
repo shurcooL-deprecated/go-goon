@@ -25,6 +25,7 @@ Lang{
 		Field2: 0,         // (int)
 	}, // (*main.Inner)
 }
+
 ```
 
 ```go
@@ -139,6 +140,7 @@ Lang{
 		Rbrace: 199, // (token.Pos)
 	}, // (*ast.BlockStmt)
 }
+
 ```
 
 Attribution
