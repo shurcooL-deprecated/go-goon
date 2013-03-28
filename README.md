@@ -14,7 +14,7 @@ $ go get -u github.com/shurcooL/go-goon
 
 Example Output
 --------------
-
+[small_example.go](https://github.com/shurcooL/go-goon/blob/master/tests/small_example.go) produces:
 ```go
 Lang{
 	Name: "Go",   // (string)
@@ -28,6 +28,7 @@ Lang{
 
 ```
 
+[large_example.go](https://github.com/shurcooL/go-goon/blob/master/tests/large_example.go) produces:
 ```go
 &ast.FuncDecl{
 	Doc:  nil, // (*ast.CommentGroup)
