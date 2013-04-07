@@ -180,13 +180,24 @@ func (d *dumpState) dump(v reflect.Value) {
 	// Handle pointers specially.
 	if kind == reflect.Ptr {
 		d.indent()
+		d.w.Write(openParenBytes)
+		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write(closeParenBytes)
+		d.w.Write(openParenBytes)
 		d.dumpPtr(v)
+		d.w.Write(closeParenBytes)
 		return
 	}
 
 	// Print type information unless already handled elsewhere.
+	var shouldPrintClosingBr bool = false
 	if !d.ignoreNextType {
 		d.indent()
+		d.w.Write(openParenBytes)
+		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write(closeParenBytes)
+		d.w.Write(openParenBytes)
+		shouldPrintClosingBr = true
 	}
 	d.ignoreNextType = false
 
@@ -227,7 +238,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		printComplex(d.w, v.Complex(), 64)
 
 	case reflect.Array, reflect.Slice:
-		d.w.Write([]byte(v.Type().String()))
+		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -253,24 +264,20 @@ func (d *dumpState) dump(v reflect.Value) {
 		// been handled above.
 
 	case reflect.Map:
+		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
 			d.indent()
 			d.w.Write(maxNewlineBytes)
 		} else {
-			numEntries := v.Len()
 			keys := v.MapKeys()
-			for i, key := range keys {
+			for _, key := range keys {
 				d.dump(d.unpackValue(key))
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
 				d.dump(d.unpackValue(v.MapIndex(key)))
-				if i < (numEntries - 1) {
-					d.w.Write(commaNewlineBytes)
-				} else {
-					d.w.Write(newlineBytes)
-				}
+				d.w.Write(commaNewlineBytes)
 			}
 		}
 		d.depth--
@@ -279,7 +286,7 @@ func (d *dumpState) dump(v reflect.Value) {
 
 	case reflect.Struct:
 		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
-		d.w.Write(openBraceNewlineBytes)
+		d.w.Write(openBraceBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
 			d.indent()
@@ -287,6 +294,9 @@ func (d *dumpState) dump(v reflect.Value) {
 		} else {
 			vt := v.Type()
 			numFields := v.NumField()
+			if numFields > 0 {
+				d.w.Write(newlineBytes)
+			}
 			for i := 0; i < numFields; i++ {
 				//if !IsZeroValue(d.unpackValue(v.Field(i))) {
 				if true {
@@ -297,11 +307,11 @@ func (d *dumpState) dump(v reflect.Value) {
 					d.ignoreNextIndent = true
 					d.dump(d.unpackValue(v.Field(i)))
 					d.w.Write(commaBytes)
-					d.w.Write([]byte("\t// "))
+					d.w.Write(newlineBytes)
+					/*d.w.Write([]byte("\t// "))
 					d.w.Write(openParenBytes)
 					d.w.Write([]byte(d.unpackValue(v.Field(i)).Type().String()))
-					d.w.Write(closeParenBytes)
-					d.w.Write(newlineBytes)
+					d.w.Write(closeParenBytes)*/
 				}
 			}
 		}
@@ -325,19 +335,31 @@ func (d *dumpState) dump(v reflect.Value) {
 			fmt.Fprintf(d.w, "%v", v.String())
 		}
 	}
+
+	if shouldPrintClosingBr {
+		d.w.Write(closeParenBytes)
+	}
 }
 
 func TypeStringWithoutPackagePrefix(v reflect.Value) string {
-	//return v.Type().String()[len(v.Type().PkgPath()) + 1:]		// TODO: Error checking?
+	//return v.Type().String()[len(v.Type().PkgPath())+1:]		// TODO: Error checking?
 	//return v.Type().PkgPath()
 	//return v.Type().String()
 	//return v.Type().Name()
-	
-	x := v.Type().String()
+
+	/*x := v.Type().String()
 	if strings.HasPrefix(x, "main.") {
-		return x[len("main."):]
+		x = x[len("main."):]
 	}
-	return x
+	return x*/
+
+	px := v.Type().String()
+	prefix := px[0 : len(px)-len(strings.TrimLeft(px, "*"))]		// Split "**main.Lang" -> "**" and "main.Lang"
+	x := px[len(prefix):]
+	if strings.HasPrefix(x, "main.") {
+		x = x[len("main."):]
+	}
+	return prefix + x
 
 	/*x = string(debug.Stack())//GetLine(string(debug.Stack()), 0)
 	//x = x[1:strings.Index(x, ":")]

@@ -16,138 +16,162 @@ Example Output
 --------------
 [small_example.go](https://github.com/shurcooL/go-goon/blob/master/tests/small_example.go) produces:
 ```go
-Lang{
-	Name: "Go",   // (string)
-	Year: 2009,   // (int)
-	URL:  "http", // (string)
-	Inner: &Inner{
-		Field1: "Secret!", // (string)
-		Field2: 0,         // (int)
-	}, // (*main.Inner)
-}
+(Lang)(Lang{
+	Name: (string)("Go"),
+	Year: (int)(2009),
+	URL:  (string)("http"),
+	Inner: (*Inner)(&Inner{
+		Field1: (string)("Secret!"),
+		Field2: (int)(0),
+	}),
+})
+
+```
+
+[complete_example.go](tests/complete_example.go) produces:
+```go
+(Lang)(Lang{
+	Name: (string)("Go"),
+	Year: (int)(2009),
+	URL:  (string)("http"),
+	Inner: (*Inner)(&Inner{
+		Field1: (string)("Secret!"),
+		Field2: (int)(0),
+	}),
+})
+(map[string]int64)(map[string]int64{
+	(string)("x"): (int64)(8),
+	(string)("y"): (int64)(7),
+	(string)("z"): (int64)(8),
+})
+([]int32)([]int32{
+	(int32)(1),
+	(int32)(5),
+	(int32)(8),
+})
 
 ```
 
 [large_example.go](https://github.com/shurcooL/go-goon/blob/master/tests/large_example.go) produces:
 ```go
-&ast.FuncDecl{
-	Doc:  nil, // (*ast.CommentGroup)
-	Recv: nil, // (*ast.FieldList)
-	Name: &ast.Ident{
-		NamePos: 169,   // (token.Pos)
-		Name:    "foo", // (string)
-		Obj: &ast.Object{
-			Kind: 5,     // (ast.ObjKind)
-			Name: "foo", // (string)
-			Decl: nil,   /*<already shown>*/ // (*ast.FuncDecl)
-			Data: nil,   // (interface {})
-			Type: nil,   // (interface {})
-		}, // (*ast.Object)
-	}, // (*ast.Ident)
-	Type: &ast.FuncType{
-		Func: 164, // (token.Pos)
-		Params: &ast.FieldList{
-			Opening: 172, // (token.Pos)
-			List: []*ast.Field{
-				&ast.Field{
-					Doc: nil, // (*ast.CommentGroup)
-					Names: []*ast.Ident{
-						&ast.Ident{
-							NamePos: 173, // (token.Pos)
-							Name:    "x", // (string)
-							Obj: &ast.Object{
-								Kind: 4,   // (ast.ObjKind)
-								Name: "x", // (string)
-								Decl: nil, /*<already shown>*/ // (*ast.Field)
-								Data: nil, // (interface {})
-								Type: nil, // (interface {})
-							}, // (*ast.Object)
-						},
-					}, // ([]*ast.Ident)
-					Type: &ast.Ident{
-						NamePos: 175,   // (token.Pos)
-						Name:    "int", // (string)
-						Obj:     nil,   // (*ast.Object)
-					}, // (*ast.Ident)
-					Tag:     nil, // (*ast.BasicLit)
-					Comment: nil, // (*ast.CommentGroup)
-				},
-			}, // ([]*ast.Field)
-			Closing: 178, // (token.Pos)
-		}, // (*ast.FieldList)
-		Results: &ast.FieldList{
-			Opening: 0, // (token.Pos)
-			List: []*ast.Field{
-				&ast.Field{
-					Doc:   nil,            // (*ast.CommentGroup)
-					Names: []*ast.Ident{}, // ([]*ast.Ident)
-					Type: &ast.Ident{
-						NamePos: 180,   // (token.Pos)
-						Name:    "int", // (string)
-						Obj:     nil,   // (*ast.Object)
-					}, // (*ast.Ident)
-					Tag:     nil, // (*ast.BasicLit)
-					Comment: nil, // (*ast.CommentGroup)
-				},
-			}, // ([]*ast.Field)
-			Closing: 0, // (token.Pos)
-		}, // (*ast.FieldList)
-	}, // (*ast.FuncType)
-	Body: &ast.BlockStmt{
-		Lbrace: 184, // (token.Pos)
-		List: []ast.Stmt{
-			&ast.ReturnStmt{
-				Return: 186, // (token.Pos)
-				Results: []ast.Expr{
-					&ast.BinaryExpr{
-						X: &ast.Ident{
-							NamePos: 193, // (token.Pos)
-							Name:    "x", // (string)
-							Obj: &ast.Object{
-								Kind: 4,   // (ast.ObjKind)
-								Name: "x", // (string)
-								Decl: &ast.Field{
-									Doc: nil, // (*ast.CommentGroup)
-									Names: []*ast.Ident{
-										&ast.Ident{
-											NamePos: 173, // (token.Pos)
-											Name:    "x", // (string)
-											Obj:     nil, /*<already shown>*/ // (*ast.Object)
-										},
-									}, // ([]*ast.Ident)
-									Type: &ast.Ident{
-										NamePos: 175,   // (token.Pos)
-										Name:    "int", // (string)
-										Obj:     nil,   // (*ast.Object)
-									}, // (*ast.Ident)
-									Tag:     nil, // (*ast.BasicLit)
-									Comment: nil, // (*ast.CommentGroup)
-								}, // (*ast.Field)
-								Data: nil, // (interface {})
-								Type: nil, // (interface {})
-							}, // (*ast.Object)
-						}, // (*ast.Ident)
-						OpPos: 195, // (token.Pos)
-						Op:    14,  // (token.Token)
-						Y: &ast.BasicLit{
-							ValuePos: 197, // (token.Pos)
-							Kind:     5,   // (token.Token)
-							Value:    "2", // (string)
-						}, // (*ast.BasicLit)
-					},
-				}, // ([]ast.Expr)
-			},
-		}, // ([]ast.Stmt)
-		Rbrace: 199, // (token.Pos)
-	}, // (*ast.BlockStmt)
-}
+(*ast.FuncDecl)(&ast.FuncDecl{
+	Doc:  (*ast.CommentGroup)(nil),
+	Recv: (*ast.FieldList)(nil),
+	Name: (*ast.Ident)(&ast.Ident{
+		NamePos: (token.Pos)(131),
+		Name:    (string)("foo"),
+		Obj: (*ast.Object)(&ast.Object{
+			Kind: (ast.ObjKind)(5),
+			Name: (string)("foo"),
+			Decl: (*ast.FuncDecl)(nil /*<already shown>*/),
+			Data: (interface{})(nil),
+			Type: (interface{})(nil),
+		}),
+	}),
+	Type: (*ast.FuncType)(&ast.FuncType{
+		Func: (token.Pos)(126),
+		Params: (*ast.FieldList)(&ast.FieldList{
+			Opening: (token.Pos)(134),
+			List: ([]*ast.Field)([]*ast.Field{
+				(*ast.Field)(&ast.Field{
+					Doc: (*ast.CommentGroup)(nil),
+					Names: ([]*ast.Ident)([]*ast.Ident{
+						(*ast.Ident)(&ast.Ident{
+							NamePos: (token.Pos)(135),
+							Name:    (string)("bar"),
+							Obj: (*ast.Object)(&ast.Object{
+								Kind: (ast.ObjKind)(4),
+								Name: (string)("bar"),
+								Decl: (*ast.Field)(nil /*<already shown>*/),
+								Data: (interface{})(nil),
+								Type: (interface{})(nil),
+							}),
+						}),
+					}),
+					Type: (*ast.Ident)(&ast.Ident{
+						NamePos: (token.Pos)(139),
+						Name:    (string)("int"),
+						Obj:     (*ast.Object)(nil),
+					}),
+					Tag:     (*ast.BasicLit)(nil),
+					Comment: (*ast.CommentGroup)(nil),
+				}),
+			}),
+			Closing: (token.Pos)(142),
+		}),
+		Results: (*ast.FieldList)(&ast.FieldList{
+			Opening: (token.Pos)(0),
+			List: ([]*ast.Field)([]*ast.Field{
+				(*ast.Field)(&ast.Field{
+					Doc:   (*ast.CommentGroup)(nil),
+					Names: ([]*ast.Ident)([]*ast.Ident{}),
+					Type: (*ast.Ident)(&ast.Ident{
+						NamePos: (token.Pos)(144),
+						Name:    (string)("int"),
+						Obj:     (*ast.Object)(nil),
+					}),
+					Tag:     (*ast.BasicLit)(nil),
+					Comment: (*ast.CommentGroup)(nil),
+				}),
+			}),
+			Closing: (token.Pos)(0),
+		}),
+	}),
+	Body: (*ast.BlockStmt)(&ast.BlockStmt{
+		Lbrace: (token.Pos)(148),
+		List: ([]ast.Stmt)([]ast.Stmt{
+			(*ast.ReturnStmt)(&ast.ReturnStmt{
+				Return: (token.Pos)(150),
+				Results: ([]ast.Expr)([]ast.Expr{
+					(*ast.BinaryExpr)(&ast.BinaryExpr{
+						X: (*ast.Ident)(&ast.Ident{
+							NamePos: (token.Pos)(157),
+							Name:    (string)("bar"),
+							Obj: (*ast.Object)(&ast.Object{
+								Kind: (ast.ObjKind)(4),
+								Name: (string)("bar"),
+								Decl: (*ast.Field)(&ast.Field{
+									Doc: (*ast.CommentGroup)(nil),
+									Names: ([]*ast.Ident)([]*ast.Ident{
+										(*ast.Ident)(&ast.Ident{
+											NamePos: (token.Pos)(135),
+											Name:    (string)("bar"),
+											Obj:     (*ast.Object)(nil /*<already shown>*/),
+										}),
+									}),
+									Type: (*ast.Ident)(&ast.Ident{
+										NamePos: (token.Pos)(139),
+										Name:    (string)("int"),
+										Obj:     (*ast.Object)(nil),
+									}),
+									Tag:     (*ast.BasicLit)(nil),
+									Comment: (*ast.CommentGroup)(nil),
+								}),
+								Data: (interface{})(nil),
+								Type: (interface{})(nil),
+							}),
+						}),
+						OpPos: (token.Pos)(161),
+						Op:    (token.Token)(14),
+						Y: (*ast.BasicLit)(&ast.BasicLit{
+							ValuePos: (token.Pos)(163),
+							Kind:     (token.Token)(5),
+							Value:    (string)("2"),
+						}),
+					}),
+				}),
+			}),
+		}),
+		Rbrace: (token.Pos)(165),
+	}),
+})
 
 ```
 
 Attribution
 -----------
 
-Go-goon source was based on the existing source of go-spew by Dave Collins. Thank you so much Dave! (I'm not very experienced with dealing with licenses, so if I've done something wrong, please let me know politely and I will politely try to fix it; my intentions are to bring the most value to all humans and I mean no harm.)
+Go-goon source was based on the existing source of go-spew by Dave Collins. Thank you so much Dave!
 
 License
 -------
