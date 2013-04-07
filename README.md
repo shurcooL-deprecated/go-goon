@@ -171,7 +171,7 @@ Example Output
 Attribution
 -----------
 
-Go-goon source was based on the existing source of go-spew by Dave Collins. Thank you so much Dave!
+Go-goon source was based on the existing source of [go-spew](https://github.com/davecgh/go-spew) by Dave Collins. Thank you so much Dave!
 
 License
 -------
