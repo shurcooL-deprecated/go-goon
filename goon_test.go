@@ -3,6 +3,14 @@ package goon_test
 import "github.com/shurcooL/go-goon"
 import "testing"
 
+import (
+	. "gist.github.com/5286084.git"
+	"io/ioutil"
+	"os"
+	"os/exec"
+	"strings"
+)
+
 func TestFirst(t *testing.T) {
 	type Inner struct {
 		Field1 string
@@ -68,5 +76,35 @@ func TestThird(t *testing.T) {
 
 	if got := goon.Sdump(x, nil); got != want {
 		t.Errorf("goon.Sdump(%#v) = %v, want %v", x, got, want)
+	}
+}
+
+func TestFourth(t *testing.T) {
+	os.Chdir("./tests/")
+	files, err := ioutil.ReadDir("./")
+	CheckError(err)
+
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".go") {
+			filename := file.Name()
+			cmd := "go run \""+filename+"\" > \""+filename+".out\""
+
+			out, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+			if nil != err || 0 != len(out) {
+				t.Errorf("Failed `%s` with err %v and output %q.", cmd, err, string(out))
+			}
+		}
+	}
+
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".go") {
+			filename := file.Name()
+			cmd := "git diff --no-ext-diff -- \""+filename+".out\""
+
+			out, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+			if nil != err || 0 != len(out) {
+				t.Errorf("Failed `%s` with err %v and output %q.", cmd, err, string(out))
+			}
+		}
 	}
 }
