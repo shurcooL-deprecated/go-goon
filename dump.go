@@ -377,8 +377,7 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 	for _, arg := range a {
 		if arg == nil {
 			w.Write(interfaceBytes)
-			w.Write(spaceBytes)
-			w.Write(nilAngleBytes)
+			w.Write(nilParenBytes)
 			w.Write(newlineBytes)
 			continue
 		}

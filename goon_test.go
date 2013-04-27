@@ -21,17 +21,19 @@ func TestFirst(t *testing.T) {
 		URL:  "http",
 		Inner: &Inner{
 			Field1: "Secret!",
+			Field2: (int)(0),
 		},
 	}
 
-	want := `Lang{
-	Name: "Go",
-	Year: 2009,
-	URL:  "http",
-	Inner: &Inner{
-		Field1: "Secret!",
-	},
-}
+	want := `(goon_test.Lang)(goon_test.Lang{
+	Name: (string)("Go"),
+	Year: (int)(2009),
+	URL:  (string)("http"),
+	Inner: (*goon_test.Inner)(&goon_test.Inner{
+		Field1: (string)("Secret!"),
+		Field2: (int)(0),
+	}),
+})
 `
 
 	if got := goon.Sdump(x); got != want {
@@ -46,13 +48,25 @@ func TestSecond(t *testing.T) {
 		3,
 	}
 
-	want := `[]int{
-	5,
-	3,
-}
+	want := `([]int)([]int{
+	(int)(5),
+	(int)(3),
+})
 `
 
 	if got := goon.Sdump(x); got != want {
+		t.Errorf("goon.Sdump(%#v) = %v, want %v", x, got, want)
+	}
+}
+
+func TestThird(t *testing.T) {
+	x := (*string)(nil)
+
+	want := `(*string)(nil)
+(interface{})(nil)
+`
+
+	if got := goon.Sdump(x, nil); got != want {
 		t.Errorf("goon.Sdump(%#v) = %v, want %v", x, got, want)
 	}
 }
