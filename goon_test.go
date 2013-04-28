@@ -11,7 +11,8 @@ import (
 )
 
 func Test(t *testing.T) {
-	os.Chdir("./tests/")
+	err := os.Chdir("./tests/")
+	CheckError(err)
 	files, err := ioutil.ReadDir("./")
 	CheckError(err)
 
