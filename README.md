@@ -30,25 +30,18 @@ Example Output
 
 [complete_example.go](tests/complete_example.go) produces:
 ```go
-(Lang)(Lang{
-	Name: (string)("Go"),
-	Year: (int)(2009),
-	URL:  (string)("http"),
-	Inner: (*Inner)(&Inner{
-		Field1: (string)("Secret!"),
-		Field2: (int)(0),
-	}),
-})
 (map[string]int64)(map[string]int64{
-	(string)("x"): (int64)(8),
-	(string)("y"): (int64)(7),
-	(string)("z"): (int64)(8),
+	(string)("z"): (int64)(7),
+	(string)("x"): (int64)(1),
+	(string)("y"): (int64)(4),
 })
 ([]int32)([]int32{
 	(int32)(1),
 	(int32)(5),
 	(int32)(8),
 })
+(*string)(nil)
+(interface{})(nil)
 
 ```
 
