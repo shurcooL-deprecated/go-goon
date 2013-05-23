@@ -31,9 +31,9 @@ Example Output
 [complete_example.go](tests/complete_example.go) produces:
 ```go
 (map[string]int64)(map[string]int64{
-	(string)("z"): (int64)(7),
 	(string)("x"): (int64)(1),
 	(string)("y"): (int64)(4),
+	(string)("z"): (int64)(7),
 })
 ([]int32)([]int32{
 	(int32)(1),

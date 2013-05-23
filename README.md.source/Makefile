@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-../README.md: * ../tests/*.go
+../README.md: * ../tests/*.go ../*.go
 	cat 1.txt \
 		<(go run ../tests/small_example.go) \
 		2.txt \

@@ -14,11 +14,14 @@ import (
 	"go/printer"
 	"go/token"
 	"go/ast"
+	"go/format"
 
 	"os/exec"
 
 	//. "gist.github.com/5258650.git"
 	//"runtime/debug"
+
+	. "gist.github.com/5286084.git"
 )
 
 var _ ast.Ident
@@ -448,14 +451,27 @@ func Gofmt3(str string) []byte {
 
 	// TODO: Error checking and other niceness
 	// http://stackoverflow.com/questions/13432947/exec-external-program-script-and-detect-if-it-requests-user-input
-	in, _ := cmd.StdinPipe()
-    in.Write([]byte(str))
-    in.Close()
+	in, err := cmd.StdinPipe()
+	CheckError(err)
+	go func() {
+		_, err = in.Write([]byte(str))
+		CheckError(err)
+		err = in.Close()
+		CheckError(err)
+	}()
 
 	data, err := cmd.Output()
 	if nil != err {
 		return []byte("gofmt error!\n" + str)
 	}
-	//if len(data) > 0 && '\n' == data[len(data) - 1] { data = data[0:len(data)-1]}
 	return data
+}
+
+// TODO: Can't use it until go/format is fixed to be consistent with gofmt, currently it strips comments out of partial Go programs
+func Gofmt4(str string) []byte {
+	formattedSrc, err := format.Source([]byte(str))
+	if nil != err {
+		return []byte("gofmt error (" + err.Error() + ")!\n" + str)
+	}
+	return formattedSrc
 }
