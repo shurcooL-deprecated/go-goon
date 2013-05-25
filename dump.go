@@ -20,8 +20,6 @@ import (
 
 	//. "gist.github.com/5258650.git"
 	//"runtime/debug"
-
-	. "gist.github.com/5286084.git"
 )
 
 var _ ast.Ident
@@ -474,4 +472,15 @@ func Gofmt4(str string) []byte {
 		return []byte("gofmt error (" + err.Error() + ")!\n" + str)
 	}
 	return formattedSrc
+}
+
+// Copypasta'd from <https://gist.github.com/shurcooL/5286084>.  That Gist has
+// a func main() which causes Go to interpret it as a command and not a package
+// such that if there are multiple entries in your GOPATH `go build` will fail.
+//
+// Panics on error
+func CheckError(err error) {
+	if nil != err {
+		panic(err)
+	}
 }
