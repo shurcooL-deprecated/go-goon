@@ -378,16 +378,14 @@ func TypeStringWithoutPackagePrefix(v reflect.Value) string {
 // methods which take varying writers and config states.
 func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 	for _, arg := range a {
-		if arg == nil {
-			w.Write(interfaceBytes)
-			w.Write(nilParenBytes)
-			w.Write(newlineBytes)
-			continue
-		}
-
 		d := dumpState{w: w, cs: cs}
-		d.pointers = make(map[uintptr]int)
-		d.dump(reflect.ValueOf(arg))
+		if arg == nil {
+			d.w.Write(interfaceBytes)
+			d.w.Write(nilParenBytes)
+		} else {
+			d.pointers = make(map[uintptr]int)
+			d.dump(reflect.ValueOf(arg))
+		}
 		d.w.Write(newlineBytes)
 	}
 }
