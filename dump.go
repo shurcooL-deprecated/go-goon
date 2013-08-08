@@ -7,16 +7,19 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 
+	"go/ast"
+	"go/format"
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"go/ast"
-	"go/format"
 
 	"os/exec"
+
+	"path/filepath"
 
 	//. "gist.github.com/5258650.git"
 	//"runtime/debug"
@@ -162,7 +165,7 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 }
 
 func IsZeroValue(v reflect.Value) bool {
-	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface()/* || reflect.Slice == v.Kind()*/ {
+	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() /* || reflect.Slice == v.Kind()*/ {
 		return false
 	}
 	return reflect.Zero(v.Type()).Interface() == v.Interface()
@@ -357,7 +360,7 @@ func TypeStringWithoutPackagePrefix(v reflect.Value) string {
 	return x*/
 
 	px := v.Type().String()
-	prefix := px[0 : len(px)-len(strings.TrimLeft(px, "*"))]		// Split "**main.Lang" -> "**" and "main.Lang"
+	prefix := px[0 : len(px)-len(strings.TrimLeft(px, "*"))] // Split "**main.Lang" -> "**" and "main.Lang"
 	x := px[len(prefix):]
 	if strings.HasPrefix(x, "main.") {
 		x = x[len("main."):]
@@ -429,7 +432,7 @@ func Gofmt2(x string) []byte {
 	fset := token.NewFileSet()
 	// Ok I give up basically reimplementing private code of gofmt here, useless work cuz go1.1 will have go/format
 	// So I'll just use gofmt binary for now
-	if file, err := parser.ParseFile(fset, "", "package p; func _() {" + x + "}", parser.ParseComments); nil == err {
+	if file, err := parser.ParseFile(fset, "", "package p; func _() {"+x+"}", parser.ParseComments); nil == err {
 		var buf bytes.Buffer
 		// The following printer.Config tries to mimic the (current) default gofmt behaviour
 		(&printer.Config{Mode: printer.UseSpaces | printer.TabIndent, Tabwidth: 8}).Fprint(&buf, fset, file)
@@ -444,8 +447,7 @@ func Gofmt2(x string) []byte {
 // TODO: Replace with go1.1's go/format
 // Actually executes gofmt binary as a new process
 func Gofmt3(str string) []byte {
-	// TODO: The gofmt path is hardcoded, this is bad
-	cmd := exec.Command("/usr/local/go/bin/gofmt")
+	cmd := exec.Command(filepath.Join(runtime.GOROOT(), "bin", "gofmt"))
 
 	// TODO: Error checking and other niceness
 	// http://stackoverflow.com/questions/13432947/exec-external-program-script-and-detect-if-it-requests-user-input
