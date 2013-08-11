@@ -42,6 +42,33 @@ Example Output
 })
 (*string)(nil)
 (interface{})(nil)
+([]uint8)([]uint8{
+	(uint8)(102),
+	(uint8)(111),
+	(uint8)(111),
+	(uint8)(100),
+	(uint8)(98),
+	(uint8)(111),
+	(uint8)(111),
+	(uint8)(104),
+	(uint8)(98),
+	(uint8)(105),
+	(uint8)(110),
+	(uint8)(103),
+	(uint8)(98),
+	(uint8)(111),
+	(uint8)(110),
+	(uint8)(103),
+	(uint8)(115),
+	(uint8)(116),
+	(uint8)(114),
+	(uint8)(105),
+	(uint8)(107),
+	(uint8)(101),
+	(uint8)(49),
+	(uint8)(50),
+	(uint8)(51),
+})
 
 ```
 
