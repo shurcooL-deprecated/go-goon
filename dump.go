@@ -2,7 +2,6 @@ package goon
 
 import (
 	"bytes"
-	"encoding/hex"
 	"fmt"
 	"io"
 	"os"
@@ -124,46 +123,6 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	}
 }
 
-// dumpSlice handles formatting of arrays and slices.  Byte (uint8 under
-// reflection) arrays and slices are dumped in hexdump -C fashion.
-func (d *dumpState) dumpSlice(v reflect.Value) {
-	// Handle byte (uint8 under reflection) arrays and slices uniquely.
-	numEntries := v.Len()
-	if (numEntries > 0) && (v.Index(0).Kind() == reflect.Uint8) {
-		// We need an addressable interface to convert the type back into a byte
-		// slice.  However, the reflect package won't give us an interface on
-		// certain things like unexported struct fields in order to enforce
-		// visibility rules.  We use unsafe to bypass these restrictions since
-		// this package does not mutate the values.
-		vs := v
-		if !vs.CanInterface() || !vs.CanAddr() {
-			vs = unsafeReflectValue(vs)
-		}
-		vs = vs.Slice(0, numEntries)
-
-		// Type assert a uint8 slice and hexdump it.  Also fix indentation
-		// based on the depth.
-		iface := vs.Interface()
-		if buf, ok := iface.([]uint8); ok {
-			indent := strings.Repeat(d.cs.Indent, d.depth)
-			str := indent + hex.Dump(buf)
-			str = strings.Replace(str, "\n", "\n"+indent, -1)
-			str = strings.TrimRight(str, d.cs.Indent)
-			d.w.Write([]byte(str))
-			return
-		}
-		// We shouldn't ever get here, but the return is intentionally in the
-		// above if statement to ensure we fall through to normal behavior if
-		// the type assertion fails for some reason.
-	}
-
-	// Recursively call dump for each item.
-	for i := 0; i < numEntries; i++ {
-		d.dump(d.unpackValue(v.Index(i)))
-		d.w.Write(commaNewlineBytes)
-	}
-}
-
 func IsZeroValue(v reflect.Value) bool {
 	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() /* || reflect.Slice == v.Kind()*/ {
 		return false
@@ -251,7 +210,10 @@ func (d *dumpState) dump(v reflect.Value) {
 			d.indent()
 			d.w.Write(maxNewlineBytes)
 		} else {
-			d.dumpSlice(v)
+			for i := 0; i < v.Len(); i++ {
+				d.dump(d.unpackValue(v.Index(i)))
+				d.w.Write(commaNewlineBytes)
+			}
 		}
 		d.depth--
 		d.indent()

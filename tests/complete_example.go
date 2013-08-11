@@ -15,4 +15,6 @@ func main() {
 		x := (*string)(nil)
 		goon.Dump(x, nil)
 	}
+
+	goon.Dump([]byte("foodboohbingbongstrike123"))
 }
