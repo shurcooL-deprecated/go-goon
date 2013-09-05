@@ -17,4 +17,6 @@ func main() {
 	}
 
 	goon.Dump([]byte("foodboohbingbongstrike123"))
+
+	goon.Dump(uintptr(0), uintptr(123))
 }

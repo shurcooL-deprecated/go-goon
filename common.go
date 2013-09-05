@@ -210,7 +210,7 @@ func printHexPtr(w io.Writer, p uintptr) {
 	// Null pointer.
 	num := uint64(p)
 	if num == 0 {
-		w.Write(nilAngleBytes)
+		w.Write(nilBytes)
 		return
 	}
 
