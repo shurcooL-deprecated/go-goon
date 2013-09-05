@@ -69,6 +69,8 @@ Example Output
 	(uint8)(50),
 	(uint8)(51),
 })
+(uintptr)(nil)
+(uintptr)(0x7b)
 
 ```
 
