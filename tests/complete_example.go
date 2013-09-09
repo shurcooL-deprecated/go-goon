@@ -19,4 +19,17 @@ func main() {
 	goon.Dump([]byte("foodboohbingbongstrike123"))
 
 	goon.Dump(uintptr(0), uintptr(123))
+
+	{
+		f := func() { println("This is a func.") }
+
+		goon.Dump(f)
+
+		f2 := func(a int, b int) int {
+			c := a + b
+			return c
+		}
+
+		goon.Dump(f2)
+	}
 }

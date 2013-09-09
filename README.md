@@ -71,6 +71,8 @@ Example Output
 })
 (uintptr)(nil)
 (uintptr)(0x7b)
+(func())(0x2570)
+(func(int, int) int)(0x25b0)
 
 ```
 
