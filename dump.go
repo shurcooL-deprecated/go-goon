@@ -24,6 +24,8 @@ import (
 	//"runtime/debug"
 
 	. "gist.github.com/5286084.git"
+
+	. "gist.github.com/6418462.git"
 )
 
 var _ ast.Ident
@@ -290,7 +292,10 @@ func (d *dumpState) dump(v reflect.Value) {
 	case reflect.Uintptr:
 		printHexPtr(d.w, uintptr(v.Uint()))
 
-	case reflect.UnsafePointer, reflect.Chan, reflect.Func:
+	case reflect.Func:
+		d.w.Write([]byte(GetSourceAsString(v.Interface())))
+
+	case reflect.UnsafePointer, reflect.Chan:
 		printHexPtr(d.w, v.Pointer())
 
 	// There were not any other types at the time this code was written, but

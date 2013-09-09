@@ -71,8 +71,11 @@ Example Output
 })
 (uintptr)(nil)
 (uintptr)(0x7b)
-(func())(0x2570)
-(func(int, int) int)(0x25b0)
+(func())(func() { println("This is a func.") })
+(func(int, int) int)(func(a int, b int) int {
+	c := a + b
+	return c
+})
 
 ```
 
