@@ -31,5 +31,11 @@ func main() {
 		}
 
 		goon.Dump(f2)
+
+		unexportedFuncStruct := struct {
+			unexportedFunc func() string
+		}{func() string { return "This is the source of an unexported struct field." }}
+
+		goon.Dump(unexportedFuncStruct)
 	}
 }

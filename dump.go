@@ -293,6 +293,9 @@ func (d *dumpState) dump(v reflect.Value) {
 		printHexPtr(d.w, uintptr(v.Uint()))
 
 	case reflect.Func:
+		if !v.CanInterface() {
+			v = unsafeReflectValue(v)
+		}
 		d.w.Write([]byte(GetSourceAsString(v.Interface())))
 
 	case reflect.UnsafePointer, reflect.Chan:

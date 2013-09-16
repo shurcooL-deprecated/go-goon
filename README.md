@@ -76,6 +76,9 @@ Example Output
 	c := a + b
 	return c
 })
+(struct{ unexportedFunc func() string })(struct{ unexportedFunc func() string }{
+	unexportedFunc: (func() string)(func() string { return "This is the source of an unexported struct field." }),
+})
 
 ```
 
