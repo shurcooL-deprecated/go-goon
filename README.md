@@ -93,7 +93,7 @@ Example Output
 		Obj: (*ast.Object)(&ast.Object{
 			Kind: (ast.ObjKind)(5),
 			Name: (string)("foo"),
-			Decl: (*ast.FuncDecl)(nil /*<already shown>*/),
+			Decl: (*ast.FuncDecl)(already_shown),
 			Data: (interface{})(nil),
 			Type: (interface{})(nil),
 		}),
@@ -112,7 +112,7 @@ Example Output
 							Obj: (*ast.Object)(&ast.Object{
 								Kind: (ast.ObjKind)(4),
 								Name: (string)("bar"),
-								Decl: (*ast.Field)(nil /*<already shown>*/),
+								Decl: (*ast.Field)(already_shown),
 								Data: (interface{})(nil),
 								Type: (interface{})(nil),
 							}),
@@ -166,7 +166,7 @@ Example Output
 										(*ast.Ident)(&ast.Ident{
 											NamePos: (token.Pos)(135),
 											Name:    (string)("bar"),
-											Obj:     (*ast.Object)(nil /*<already shown>*/),
+											Obj:     (*ast.Object)(already_shown),
 										}),
 									}),
 									Type: (*ast.Ident)(&ast.Ident{

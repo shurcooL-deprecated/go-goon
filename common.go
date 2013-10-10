@@ -74,7 +74,7 @@ var (
 	nilParenBytes         = []byte("(nil)")
 	maxNewlineBytes       = []byte("<max depth reached>\n")
 	maxShortBytes         = []byte("<max>")
-	circularBytes         = []byte("nil /*<already shown>*/")
+	circularBytes         = []byte("already_shown")
 	circularShortBytes    = []byte("<shown>")
 	invalidAngleBytes     = []byte("<invalid>")
 	openBracketBytes      = []byte("[")

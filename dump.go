@@ -367,7 +367,7 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	return Gofmt3(buf.String())
+	return Gofmt4(buf.String())
 }
 
 // Dumps to string
