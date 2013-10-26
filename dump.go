@@ -26,6 +26,8 @@ import (
 	. "gist.github.com/5286084.git"
 
 	. "gist.github.com/6418462.git"
+
+	. "gist.github.com/6418290.git"
 )
 
 var _ ast.Ident
@@ -378,6 +380,46 @@ func Sdump(a ...interface{}) string {
 // Dumps goons to stdout.
 func Dump(a ...interface{}) {
 	os.Stdout.Write(bdump(a...))
+}
+
+func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) {
+	for argIndex, arg := range a {
+		d := dumpState{w: w, cs: cs}
+		if argIndex < len(names) {
+			d.w.Write([]byte(names[argIndex]))
+			d.w.Write([]byte(" = "))
+		}
+		if arg == nil {
+			d.w.Write(interfaceBytes)
+			d.w.Write(nilParenBytes)
+		} else {
+			d.pointers = make(map[uintptr]int)
+			d.dump(reflect.ValueOf(arg))
+		}
+		if len(names) >= len(a) {
+			d.w.Write(newlineBytes)
+		} else {
+			if argIndex < len(a)-1 {
+				d.w.Write(commaNewlineBytes)
+			} else {
+				d.w.Write(newlineBytes)
+			}
+		}
+	}
+}
+
+func bdumpNamed(names []string, a ...interface{}) []byte {
+	var buf bytes.Buffer
+	fdumpNamed(&config, &buf, names, a...)
+	return gofmt4(buf.String())
+}
+
+func SdumpExpr(a ...interface{}) string {
+	return string(bdumpNamed(GetParentArgExprAllAsString(), a...))
+}
+
+func DumpExpr(a ...interface{}) {
+	os.Stdout.Write(bdumpNamed(GetParentArgExprAllAsString(), a...))
 }
 
 // Noop
