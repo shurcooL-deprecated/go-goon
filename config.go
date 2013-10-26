@@ -1,7 +1,6 @@
 package goon
 
-import (
-)
+import ()
 
 // ConfigState houses the configuration options used by spew to format and
 // display values.  There is a global instance, Config, that is used to control
@@ -10,7 +9,7 @@ import (
 //
 // The zero value for ConfigState provides no indentation.  You would typically
 // want to set it to a space or a tab.
-type ConfigState struct {
+type configState struct {
 	// Indent specifies the string to use for each indentation level.  The
 	// global config instance that all top-level functions use set this to a
 	// single space by default.  If you would like more indentation, you might
@@ -51,4 +50,4 @@ type ConfigState struct {
 	ContinueOnMethod bool
 }
 
-var config ConfigState = ConfigState{Indent: "\t", DisableMethods: true}
+var config configState = configState{Indent: "\t", DisableMethods: true}

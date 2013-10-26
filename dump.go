@@ -40,7 +40,7 @@ type dumpState struct {
 	pointers         map[uintptr]int
 	ignoreNextType   bool
 	ignoreNextIndent bool
-	cs               *ConfigState
+	cs               *configState
 }
 
 // indent performs indentation according to the depth level and cs.Indent
@@ -125,7 +125,7 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	}
 }
 
-func IsZeroValue(v reflect.Value) bool {
+func isZeroValue(v reflect.Value) bool {
 	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() /* || reflect.Slice == v.Kind()*/ {
 		return false
 	}
@@ -148,7 +148,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	if kind == reflect.Ptr {
 		d.indent()
 		d.w.Write(openParenBytes)
-		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(closeParenBytes)
 		d.w.Write(openParenBytes)
 		d.dumpPtr(v)
@@ -161,7 +161,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	if !d.ignoreNextType {
 		d.indent()
 		d.w.Write(openParenBytes)
-		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(closeParenBytes)
 		d.w.Write(openParenBytes)
 		shouldPrintClosingBr = true
@@ -205,7 +205,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		printComplex(d.w, v.Complex(), 64)
 
 	case reflect.Array, reflect.Slice:
-		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -234,7 +234,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		// been handled above.
 
 	case reflect.Map:
-		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -255,7 +255,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write(closeBraceBytes)
 
 	case reflect.Struct:
-		d.w.Write([]byte(TypeStringWithoutPackagePrefix(v)))
+		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceBytes)
 		d.depth++
 		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
@@ -317,7 +317,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	}
 }
 
-func TypeStringWithoutPackagePrefix(v reflect.Value) string {
+func typeStringWithoutPackagePrefix(v reflect.Value) string {
 	//return v.Type().String()[len(v.Type().PkgPath())+1:]		// TODO: Error checking?
 	//return v.Type().PkgPath()
 	//return v.Type().String()
@@ -349,7 +349,7 @@ func TypeStringWithoutPackagePrefix(v reflect.Value) string {
 
 // fdump is a helper function to consolidate the logic from the various public
 // methods which take varying writers and config states.
-func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
+func fdump(cs *configState, w io.Writer, a ...interface{}) {
 	for _, arg := range a {
 		d := dumpState{w: w, cs: cs}
 		if arg == nil {
@@ -367,7 +367,7 @@ func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	return Gofmt4(buf.String())
+	return gofmt4(buf.String())
 }
 
 // Dumps to string
@@ -381,12 +381,12 @@ func Dump(a ...interface{}) {
 }
 
 // Noop
-func Gofmt0(str string) []byte {
+func gofmt0(str string) []byte {
 	return []byte(str)
 }
 
 // TODO: Replace with go1.1's go/format
-func Gofmt1(str string) []byte {
+func gofmt1(str string) []byte {
 	if expr, err := parser.ParseExpr(str); nil == err {
 		var buf bytes.Buffer
 		// This loses the formatting spacing information due to NewFileSet
@@ -398,7 +398,7 @@ func Gofmt1(str string) []byte {
 
 // TODO: Replace with go1.1's go/format
 // Mimics gofmt's default internal behaviour
-func Gofmt2(x string) []byte {
+func gofmt2(x string) []byte {
 	fset := token.NewFileSet()
 	// Ok I give up basically reimplementing private code of gofmt here, useless work cuz go1.1 will have go/format
 	// So I'll just use gofmt binary for now
@@ -416,7 +416,7 @@ func Gofmt2(x string) []byte {
 
 // TODO: Replace with go1.1's go/format
 // Actually executes gofmt binary as a new process
-func Gofmt3(str string) []byte {
+func gofmt3(str string) []byte {
 	cmd := exec.Command(filepath.Join(runtime.GOROOT(), "bin", "gofmt"))
 
 	// TODO: Error checking and other niceness
@@ -438,7 +438,7 @@ func Gofmt3(str string) []byte {
 }
 
 // TODO: Can't use it until go/format is fixed to be consistent with gofmt, currently it strips comments out of partial Go programs
-func Gofmt4(str string) []byte {
+func gofmt4(str string) []byte {
 	formattedSrc, err := format.Source([]byte(str))
 	if nil != err {
 		return []byte("gofmt error (" + err.Error() + ")!\n" + str)
