@@ -370,12 +370,12 @@ func bdump(a ...interface{}) []byte {
 	return gofmt4(buf.String())
 }
 
-// Dumps to string
+// Dumps goons to a string.
 func Sdump(a ...interface{}) string {
 	return string(bdump(a...))
 }
 
-// Dumps to stdout
+// Dumps goons to stdout.
 func Dump(a ...interface{}) {
 	os.Stdout.Write(bdump(a...))
 }
