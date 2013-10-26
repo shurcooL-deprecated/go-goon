@@ -414,10 +414,19 @@ func bdumpNamed(names []string, a ...interface{}) []byte {
 	return gofmt4(buf.String())
 }
 
+// Dumps goon expressions to a string.
 func SdumpExpr(a ...interface{}) string {
 	return string(bdumpNamed(GetParentArgExprAllAsString(), a...))
 }
 
+// Dumps goon expressions to stdout.
+//
+// E.g.,
+//	somethingImportant := 5
+//	DumpExpr(somethingImportant)
+//
+// Will print:
+//	somethingImportant = (int)(5)
 func DumpExpr(a ...interface{}) {
 	os.Stdout.Write(bdumpNamed(GetParentArgExprAllAsString(), a...))
 }
