@@ -1,9 +1,9 @@
 go-goon
 =======
 
-Go-goon is a WIP Go implementation of [goon](https://github.com/shurcooL/goon).
+go-goon is a Go implementation of [goon](https://github.com/shurcooL/goon).
 
-Go-goon currently seems to work for _more_ of the inputs than previously, but could potentially panic and produce wrong results for some inputs. It doesn't reproduce circular structures accurately. There are some things hardcoded and unfinished, so at this time it's not production ready. I plan to fix problems and add missing functionality as I use it in other situations and notice it break.
+It doesn't reproduce circular structures accurately. There are some things hardcoded and unfinished, so code can be cleaned up. Please open an issue if you encounter issues.
 
 Installation
 ------------
