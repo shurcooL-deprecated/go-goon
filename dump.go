@@ -489,6 +489,7 @@ func gofmt3(str string) []byte {
 }
 
 // TODO: Can't use it until go/format is fixed to be consistent with gofmt, currently it strips comments out of partial Go programs
+// See: https://code.google.com/p/go/issues/detail?id=5551
 func gofmt4(str string) []byte {
 	formattedSrc, err := format.Source([]byte(str))
 	if nil != err {
