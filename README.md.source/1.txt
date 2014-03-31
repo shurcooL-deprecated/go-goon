@@ -14,6 +14,7 @@ $ go get -u github.com/shurcooL/go-goon
 
 Example Output
 --------------
+
 [small_example.go](tests/small_example.go) produces:
 
 ```go
