@@ -3,11 +3,12 @@ package goon_test
 import "testing"
 
 import (
-	. "gist.github.com/5286084.git"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
+
+	. "gist.github.com/5286084.git"
 )
 
 func Test(t *testing.T) {

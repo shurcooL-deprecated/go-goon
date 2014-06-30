@@ -1,11 +1,12 @@
 package main
 
 import (
-	. "gist.github.com/5259939.git"
-	"github.com/shurcooL/go-goon"
 	"go/ast"
 	"go/parser"
 	"go/token"
+
+	. "gist.github.com/5259939.git"
+	"github.com/shurcooL/go-goon"
 )
 
 func foo(bar int) int { return bar * 2 }

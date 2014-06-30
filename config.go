@@ -1,7 +1,5 @@
 package goon
 
-import ()
-
 // ConfigState houses the configuration options used by spew to format and
 // display values.  There is a global instance, Config, that is used to control
 // all top-level Formatter and Dump functionality.  Each ConfigState instance
