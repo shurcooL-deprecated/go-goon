@@ -3,8 +3,6 @@ go-goon
 
 go-goon is a Go implementation of [goon](https://github.com/shurcooL/goon).
 
-It doesn't reproduce circular structures accurately. There are some things hardcoded and unfinished, so code can be cleaned up. Please open an issue if you encounter issues.
-
 Installation
 ------------
 
@@ -92,7 +90,7 @@ Example Output
 	Doc:  (*ast.CommentGroup)(nil),
 	Recv: (*ast.FieldList)(nil),
 	Name: (*ast.Ident)(&ast.Ident{
-		NamePos: (token.Pos)(131),
+		NamePos: (token.Pos)(132),
 		Name:    (string)("foo"),
 		Obj: (*ast.Object)(&ast.Object{
 			Kind: (ast.ObjKind)(5),
@@ -103,15 +101,15 @@ Example Output
 		}),
 	}),
 	Type: (*ast.FuncType)(&ast.FuncType{
-		Func: (token.Pos)(126),
+		Func: (token.Pos)(127),
 		Params: (*ast.FieldList)(&ast.FieldList{
-			Opening: (token.Pos)(134),
+			Opening: (token.Pos)(135),
 			List: ([]*ast.Field)([]*ast.Field{
 				(*ast.Field)(&ast.Field{
 					Doc: (*ast.CommentGroup)(nil),
 					Names: ([]*ast.Ident)([]*ast.Ident{
 						(*ast.Ident)(&ast.Ident{
-							NamePos: (token.Pos)(135),
+							NamePos: (token.Pos)(136),
 							Name:    (string)("bar"),
 							Obj: (*ast.Object)(&ast.Object{
 								Kind: (ast.ObjKind)(4),
@@ -123,7 +121,7 @@ Example Output
 						}),
 					}),
 					Type: (*ast.Ident)(&ast.Ident{
-						NamePos: (token.Pos)(139),
+						NamePos: (token.Pos)(140),
 						Name:    (string)("int"),
 						Obj:     (*ast.Object)(nil),
 					}),
@@ -131,7 +129,7 @@ Example Output
 					Comment: (*ast.CommentGroup)(nil),
 				}),
 			}),
-			Closing: (token.Pos)(142),
+			Closing: (token.Pos)(143),
 		}),
 		Results: (*ast.FieldList)(&ast.FieldList{
 			Opening: (token.Pos)(0),
@@ -140,7 +138,7 @@ Example Output
 					Doc:   (*ast.CommentGroup)(nil),
 					Names: ([]*ast.Ident)([]*ast.Ident{}),
 					Type: (*ast.Ident)(&ast.Ident{
-						NamePos: (token.Pos)(144),
+						NamePos: (token.Pos)(145),
 						Name:    (string)("int"),
 						Obj:     (*ast.Object)(nil),
 					}),
@@ -152,14 +150,14 @@ Example Output
 		}),
 	}),
 	Body: (*ast.BlockStmt)(&ast.BlockStmt{
-		Lbrace: (token.Pos)(148),
+		Lbrace: (token.Pos)(149),
 		List: ([]ast.Stmt)([]ast.Stmt{
 			(*ast.ReturnStmt)(&ast.ReturnStmt{
-				Return: (token.Pos)(150),
+				Return: (token.Pos)(151),
 				Results: ([]ast.Expr)([]ast.Expr{
 					(*ast.BinaryExpr)(&ast.BinaryExpr{
 						X: (*ast.Ident)(&ast.Ident{
-							NamePos: (token.Pos)(157),
+							NamePos: (token.Pos)(158),
 							Name:    (string)("bar"),
 							Obj: (*ast.Object)(&ast.Object{
 								Kind: (ast.ObjKind)(4),
@@ -168,13 +166,13 @@ Example Output
 									Doc: (*ast.CommentGroup)(nil),
 									Names: ([]*ast.Ident)([]*ast.Ident{
 										(*ast.Ident)(&ast.Ident{
-											NamePos: (token.Pos)(135),
+											NamePos: (token.Pos)(136),
 											Name:    (string)("bar"),
 											Obj:     (*ast.Object)(already_shown),
 										}),
 									}),
 									Type: (*ast.Ident)(&ast.Ident{
-										NamePos: (token.Pos)(139),
+										NamePos: (token.Pos)(140),
 										Name:    (string)("int"),
 										Obj:     (*ast.Object)(nil),
 									}),
@@ -185,10 +183,10 @@ Example Output
 								Type: (interface{})(nil),
 							}),
 						}),
-						OpPos: (token.Pos)(161),
+						OpPos: (token.Pos)(162),
 						Op:    (token.Token)(14),
 						Y: (*ast.BasicLit)(&ast.BasicLit{
-							ValuePos: (token.Pos)(163),
+							ValuePos: (token.Pos)(164),
 							Kind:     (token.Token)(5),
 							Value:    (string)("2"),
 						}),
@@ -196,7 +194,7 @@ Example Output
 				}),
 			}),
 		}),
-		Rbrace: (token.Pos)(165),
+		Rbrace: (token.Pos)(166),
 	}),
 })
 

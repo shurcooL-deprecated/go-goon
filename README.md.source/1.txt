@@ -3,8 +3,6 @@ go-goon
 
 go-goon is a Go implementation of [goon](https://github.com/shurcooL/goon).
 
-It doesn't reproduce circular structures accurately. There are some things hardcoded and unfinished, so code can be cleaned up. Please open an issue if you encounter issues.
-
 Installation
 ------------
 
