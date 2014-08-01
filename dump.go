@@ -23,11 +23,11 @@ import (
 	//. "gist.github.com/5258650.git"
 	//"runtime/debug"
 
-	. "gist.github.com/5286084.git"
+	. "github.com/shurcooL/go/gists/gist5286084"
 
-	. "gist.github.com/6418462.git"
+	. "github.com/shurcooL/go/gists/gist6418462"
 
-	. "gist.github.com/6418290.git"
+	. "github.com/shurcooL/go/gists/gist6418290"
 )
 
 var _ ast.Ident

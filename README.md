@@ -90,7 +90,7 @@ Example Output
 	Doc:  (*ast.CommentGroup)(nil),
 	Recv: (*ast.FieldList)(nil),
 	Name: (*ast.Ident)(&ast.Ident{
-		NamePos: (token.Pos)(132),
+		NamePos: (token.Pos)(146),
 		Name:    (string)("foo"),
 		Obj: (*ast.Object)(&ast.Object{
 			Kind: (ast.ObjKind)(5),
@@ -101,15 +101,15 @@ Example Output
 		}),
 	}),
 	Type: (*ast.FuncType)(&ast.FuncType{
-		Func: (token.Pos)(127),
+		Func: (token.Pos)(141),
 		Params: (*ast.FieldList)(&ast.FieldList{
-			Opening: (token.Pos)(135),
+			Opening: (token.Pos)(149),
 			List: ([]*ast.Field)([]*ast.Field{
 				(*ast.Field)(&ast.Field{
 					Doc: (*ast.CommentGroup)(nil),
 					Names: ([]*ast.Ident)([]*ast.Ident{
 						(*ast.Ident)(&ast.Ident{
-							NamePos: (token.Pos)(136),
+							NamePos: (token.Pos)(150),
 							Name:    (string)("bar"),
 							Obj: (*ast.Object)(&ast.Object{
 								Kind: (ast.ObjKind)(4),
@@ -121,7 +121,7 @@ Example Output
 						}),
 					}),
 					Type: (*ast.Ident)(&ast.Ident{
-						NamePos: (token.Pos)(140),
+						NamePos: (token.Pos)(154),
 						Name:    (string)("int"),
 						Obj:     (*ast.Object)(nil),
 					}),
@@ -129,7 +129,7 @@ Example Output
 					Comment: (*ast.CommentGroup)(nil),
 				}),
 			}),
-			Closing: (token.Pos)(143),
+			Closing: (token.Pos)(157),
 		}),
 		Results: (*ast.FieldList)(&ast.FieldList{
 			Opening: (token.Pos)(0),
@@ -138,7 +138,7 @@ Example Output
 					Doc:   (*ast.CommentGroup)(nil),
 					Names: ([]*ast.Ident)([]*ast.Ident{}),
 					Type: (*ast.Ident)(&ast.Ident{
-						NamePos: (token.Pos)(145),
+						NamePos: (token.Pos)(159),
 						Name:    (string)("int"),
 						Obj:     (*ast.Object)(nil),
 					}),
@@ -150,14 +150,14 @@ Example Output
 		}),
 	}),
 	Body: (*ast.BlockStmt)(&ast.BlockStmt{
-		Lbrace: (token.Pos)(149),
+		Lbrace: (token.Pos)(163),
 		List: ([]ast.Stmt)([]ast.Stmt{
 			(*ast.ReturnStmt)(&ast.ReturnStmt{
-				Return: (token.Pos)(151),
+				Return: (token.Pos)(165),
 				Results: ([]ast.Expr)([]ast.Expr{
 					(*ast.BinaryExpr)(&ast.BinaryExpr{
 						X: (*ast.Ident)(&ast.Ident{
-							NamePos: (token.Pos)(158),
+							NamePos: (token.Pos)(172),
 							Name:    (string)("bar"),
 							Obj: (*ast.Object)(&ast.Object{
 								Kind: (ast.ObjKind)(4),
@@ -166,13 +166,13 @@ Example Output
 									Doc: (*ast.CommentGroup)(nil),
 									Names: ([]*ast.Ident)([]*ast.Ident{
 										(*ast.Ident)(&ast.Ident{
-											NamePos: (token.Pos)(136),
+											NamePos: (token.Pos)(150),
 											Name:    (string)("bar"),
 											Obj:     (*ast.Object)(already_shown),
 										}),
 									}),
 									Type: (*ast.Ident)(&ast.Ident{
-										NamePos: (token.Pos)(140),
+										NamePos: (token.Pos)(154),
 										Name:    (string)("int"),
 										Obj:     (*ast.Object)(nil),
 									}),
@@ -183,10 +183,10 @@ Example Output
 								Type: (interface{})(nil),
 							}),
 						}),
-						OpPos: (token.Pos)(162),
+						OpPos: (token.Pos)(176),
 						Op:    (token.Token)(14),
 						Y: (*ast.BasicLit)(&ast.BasicLit{
-							ValuePos: (token.Pos)(164),
+							ValuePos: (token.Pos)(178),
 							Kind:     (token.Token)(5),
 							Value:    (string)("2"),
 						}),
@@ -194,7 +194,7 @@ Example Output
 				}),
 			}),
 		}),
-		Rbrace: (token.Pos)(166),
+		Rbrace: (token.Pos)(180),
 	}),
 })
 

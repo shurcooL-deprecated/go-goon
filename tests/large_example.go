@@ -5,7 +5,8 @@ import (
 	"go/parser"
 	"go/token"
 
-	. "gist.github.com/5259939.git"
+	. "github.com/shurcooL/go/gists/gist5259939"
+
 	"github.com/shurcooL/go-goon"
 )
 
