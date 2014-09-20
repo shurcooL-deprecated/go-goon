@@ -10,10 +10,10 @@ Installation
 go get -u github.com/shurcooL/go-goon
 ```
 
-Example
--------
+Examples
+--------
 
-```go
+```Go
 x := Lang{
 	Name: "Go",
 	Year: 2009,
@@ -35,7 +35,30 @@ goon.Dump(x)
 //		Field2: (int)(0),
 //	}),
 //})
-//
+```
+
+```Go
+items := []int{1, 2, 3}
+
+goon.DumpExpr(len(items))
+
+// Output:
+//len(items) = (int)(3)
+```
+
+```Go
+adderFunc := func(a int, b int) int {
+	c := a + b
+	return c
+}
+
+goon.DumpExpr(adderFunc)
+
+// Output:
+//adderFunc = (func(int, int) int)(func(a int, b int) int {
+//	c := a + b
+//	return c
+//})
 ```
 
 Attribution
