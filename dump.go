@@ -1,3 +1,4 @@
+// Package goon is a deep pretty printer with Go-like notation.
 package goon
 
 import (
@@ -336,6 +337,9 @@ func typeStringWithoutPackagePrefix(v reflect.Value) string {
 	x := px[len(prefix):]
 	if strings.HasPrefix(x, "main.") {
 		x = x[len("main."):]
+	}
+	if strings.HasPrefix(x, "goon_test.") {
+		x = x[len("goon_test."):]
 	}
 	return prefix + x
 

@@ -1,38 +1,129 @@
 package goon_test
 
-import "testing"
+import "github.com/shurcooL/go-goon"
 
-import (
-	"io/ioutil"
-	"os"
-	"os/exec"
-	"strings"
-
-	. "github.com/shurcooL/go/gists/gist5286084"
-)
-
-func Test(t *testing.T) {
-	err := os.Chdir("./tests/")
-	CheckError(err)
-	files, err := ioutil.ReadDir("./")
-	CheckError(err)
-
-	cmds := []func(string) string{
-		func(filename string) string { return "go run \"" + filename + "\" > \"" + filename + ".out\"" },
-		func(filename string) string { return "git diff --no-ext-diff -- \"" + filename + ".out\"" },
+func Example() {
+	type Inner struct {
+		Field1 string
+		Field2 int
+	}
+	type Lang struct {
+		Name  string
+		Year  int
+		URL   string
+		Inner *Inner
 	}
 
-	for _, cmd := range cmds {
-		for _, file := range files {
-			if !file.IsDir() && strings.HasSuffix(file.Name(), ".go") {
-				filename := file.Name()
-				cmdString := cmd(filename)
+	x := Lang{
+		Name: "Go",
+		Year: 2009,
+		URL:  "http",
+		Inner: &Inner{
+			Field1: "Secret!",
+		},
+	}
 
-				out, err := exec.Command("bash", "-c", cmdString).CombinedOutput()
-				if nil != err || 0 != len(out) {
-					t.Errorf("Failed `%s` with err %v and output %q.", cmdString, err, string(out))
-				}
-			}
+	goon.Dump(x)
+
+	// Output:
+	//(Lang)(Lang{
+	//	Name: (string)("Go"),
+	//	Year: (int)(2009),
+	//	URL:  (string)("http"),
+	//	Inner: (*Inner)(&Inner{
+	//		Field1: (string)("Secret!"),
+	//		Field2: (int)(0),
+	//	}),
+	//})
+	//
+}
+
+func ExampleComplete() {
+	goon.Dump(map[string]int64{
+		"x": 1,
+		"y": 4,
+		"z": 7,
+	})
+
+	goon.Dump([]int32{1, 5, 8})
+
+	{
+		x := (*string)(nil)
+		goon.Dump(x, nil)
+	}
+
+	goon.Dump([]byte("foodboohbingbongstrike123"))
+
+	goon.Dump(uintptr(0), uintptr(123))
+
+	{
+		f := func() { println("This is a func.") }
+
+		goon.Dump(f)
+
+		f2 := func(a int, b int) int {
+			c := a + b
+			return c
 		}
+
+		goon.Dump(f2)
+
+		unexportedFuncStruct := struct {
+			unexportedFunc func() string
+		}{func() string { return "This is the source of an unexported struct field." }}
+
+		goon.Dump(unexportedFuncStruct)
 	}
+
+	// Output:
+	//(map[string]int64)(map[string]int64{
+	//	(string)("x"): (int64)(1),
+	//	(string)("y"): (int64)(4),
+	//	(string)("z"): (int64)(7),
+	//})
+	//([]int32)([]int32{
+	//	(int32)(1),
+	//	(int32)(5),
+	//	(int32)(8),
+	//})
+	//(*string)(nil)
+	//(interface{})(nil)
+	//([]uint8)([]uint8{
+	//	(uint8)(102),
+	//	(uint8)(111),
+	//	(uint8)(111),
+	//	(uint8)(100),
+	//	(uint8)(98),
+	//	(uint8)(111),
+	//	(uint8)(111),
+	//	(uint8)(104),
+	//	(uint8)(98),
+	//	(uint8)(105),
+	//	(uint8)(110),
+	//	(uint8)(103),
+	//	(uint8)(98),
+	//	(uint8)(111),
+	//	(uint8)(110),
+	//	(uint8)(103),
+	//	(uint8)(115),
+	//	(uint8)(116),
+	//	(uint8)(114),
+	//	(uint8)(105),
+	//	(uint8)(107),
+	//	(uint8)(101),
+	//	(uint8)(49),
+	//	(uint8)(50),
+	//	(uint8)(51),
+	//})
+	//(uintptr)(nil)
+	//(uintptr)(0x7b)
+	//(func())(func() { println("This is a func.") })
+	//(func(int, int) int)(func(a int, b int) int {
+	//	c := a + b
+	//	return c
+	//})
+	//(struct{ unexportedFunc func() string })(struct{ unexportedFunc func() string }{
+	//	unexportedFunc: (func() string)(func() string { return "This is the source of an unexported struct field." }),
+	//})
+	//
 }

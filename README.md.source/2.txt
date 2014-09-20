@@ -1,6 +1,0 @@
-
-```
-
-[complete_example.go](tests/complete_example.go) produces:
-
-```go

@@ -1,9 +1,0 @@
-(Lang)(Lang{
-	Name: (string)("Go"),
-	Year: (int)(2009),
-	URL:  (string)("http"),
-	Inner: (*Inner)(&Inner{
-		Field1: (string)("Secret!"),
-		Field2: (int)(0),
-	}),
-})
