@@ -1,4 +1,4 @@
-// Package goon is a deep pretty printer with Go-like notation.
+// Package goon is a deep pretty printer with Go-like notation. It implements the goon specification.
 package goon
 
 import (
