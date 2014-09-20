@@ -1,6 +1,10 @@
 package goon_test
 
-import "github.com/shurcooL/go-goon"
+import (
+	"testing"
+
+	"github.com/shurcooL/go-goon"
+)
 
 func Example() {
 	type Inner struct {
@@ -38,13 +42,28 @@ func Example() {
 	//
 }
 
-func ExampleComplete() {
-	goon.Dump(map[string]int64{
+func TestMap(t *testing.T) {
+	got := goon.Sdump(map[string]int64{
 		"x": 1,
-		"y": 4,
 		"z": 7,
 	})
 
+	expected := []string{`(map[string]int64)(map[string]int64{
+	(string)("x"): (int64)(1),
+	(string)("z"): (int64)(7),
+})
+`, `(map[string]int64)(map[string]int64{
+	(string)("z"): (int64)(7),
+	(string)("x"): (int64)(1),
+})
+`}
+
+	if got != expected[0] && got != expected[1] {
+		t.Errorf("got %s", got)
+	}
+}
+
+func ExampleComplete() {
 	goon.Dump([]int32{1, 5, 8})
 
 	{
@@ -76,11 +95,6 @@ func ExampleComplete() {
 	}
 
 	// Output:
-	//(map[string]int64)(map[string]int64{
-	//	(string)("x"): (int64)(1),
-	//	(string)("y"): (int64)(4),
-	//	(string)("z"): (int64)(7),
-	//})
 	//([]int32)([]int32{
 	//	(int32)(1),
 	//	(int32)(5),
