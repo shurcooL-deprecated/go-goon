@@ -17,6 +17,9 @@ import (
 	"go/printer"
 	"go/token"
 
+	// TODO: Replace with "go/format" once https://codereview.appspot.com/142360043 is submitted and released.
+	format5551fixed "github.com/shurcooL/go/go/format"
+
 	"os/exec"
 
 	"path/filepath"
@@ -373,7 +376,7 @@ func fdump(cs *configState, w io.Writer, a ...interface{}) {
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	return gofmt4(buf.String())
+	return gofmt5b(buf.Bytes())
 }
 
 // Dumps goons to a string.
@@ -415,7 +418,7 @@ func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) 
 func bdumpNamed(names []string, a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdumpNamed(&config, &buf, names, a...)
-	return gofmt4(buf.String())
+	return gofmt5b(buf.Bytes())
 }
 
 // Dumps goon expressions to a string.
@@ -498,6 +501,15 @@ func gofmt4(str string) []byte {
 	formattedSrc, err := format.Source([]byte(str))
 	if nil != err {
 		return []byte("gofmt error (" + err.Error() + ")!\n" + str)
+	}
+	return formattedSrc
+}
+
+// TODO: Replace with "go/format" once https://codereview.appspot.com/142360043 is submitted and released.
+func gofmt5b(src []byte) []byte {
+	formattedSrc, err := format5551fixed.Source(src)
+	if nil != err {
+		return []byte("gofmt error (" + err.Error() + ")!\n" + string(src))
 	}
 	return formattedSrc
 }
