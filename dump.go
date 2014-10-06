@@ -17,7 +17,7 @@ import (
 	"go/printer"
 	"go/token"
 
-	// TODO: Replace with "go/format" once https://codereview.appspot.com/142360043 is submitted and released.
+	// TODO: Replace with "go/format" once Go 1.4 is released.
 	format5551fixed "github.com/shurcooL/go/go/format"
 
 	"os/exec"
@@ -505,7 +505,7 @@ func gofmt4(str string) []byte {
 	return formattedSrc
 }
 
-// TODO: Replace with "go/format" once https://codereview.appspot.com/142360043 is submitted and released.
+// TODO: Replace with "go/format" once Go 1.4 is released.
 func gofmt5b(src []byte) []byte {
 	formattedSrc, err := format5551fixed.Source(src)
 	if nil != err {
