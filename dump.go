@@ -27,8 +27,6 @@ import (
 	//. "gist.github.com/5258650.git"
 	//"runtime/debug"
 
-	. "github.com/shurcooL/go/gists/gist5286084"
-
 	. "github.com/shurcooL/go/gists/gist6418462"
 
 	. "github.com/shurcooL/go/gists/gist6418290"
@@ -480,12 +478,18 @@ func gofmt3(str string) []byte {
 	// TODO: Error checking and other niceness
 	// http://stackoverflow.com/questions/13432947/exec-external-program-script-and-detect-if-it-requests-user-input
 	in, err := cmd.StdinPipe()
-	CheckError(err)
+	if err != nil {
+		panic(err)
+	}
 	go func() {
 		_, err = in.Write([]byte(str))
-		CheckError(err)
+		if err != nil {
+			panic(err)
+		}
 		err = in.Close()
-		CheckError(err)
+		if err != nil {
+			panic(err)
+		}
 	}()
 
 	data, err := cmd.Output()
