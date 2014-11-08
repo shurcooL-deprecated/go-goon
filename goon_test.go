@@ -42,6 +42,32 @@ func Example() {
 	//
 }
 
+func ExampleUnexported() {
+	type Lang struct {
+		Name string
+		year int
+		url  string
+	}
+
+	x := Lang{
+		Name: "Go",
+		year: 2009,
+		url:  "http",
+	}
+
+	goon.Dump(x)
+
+	// Output:
+	//(Lang)(Lang{
+	//	Name: (string)("Go"),
+	//	year: (int)(2009),
+	//	url:  (string)("http"),
+	//})
+	//
+}
+
+// Since maps elements are unordered, they may be printed in any order.
+// We need to check that the output is one of expected permutations.
 func TestMap(t *testing.T) {
 	got := goon.Sdump(map[string]int64{
 		"x": 1,
