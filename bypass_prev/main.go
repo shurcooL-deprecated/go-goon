@@ -1,4 +1,6 @@
-package bypass_prev
+// Package bypass allows bypassing reflect restrictions on accessing unexported struct fields.
+// This version is only compatible with Go 1.3, but not 1.4.
+package bypass
 
 import (
 	"reflect"

@@ -1,4 +1,5 @@
 // Package bypass allows bypassing reflect restrictions on accessing unexported struct fields.
+// This version uses an alternate approach to just modify the reflect.Value.flag's flagRO bit.
 package bypass
 
 import (
@@ -96,6 +97,6 @@ func bypass(v reflect.Value) reflect.Value {
 	return v
 }
 
-func UnsafeReflectValueC(v reflect.Value) (rv reflect.Value) {
+func UnsafeReflectValue(v reflect.Value) (rv reflect.Value) {
 	return bypass(v)
 }
