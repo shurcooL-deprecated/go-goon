@@ -5,46 +5,9 @@ import (
 	"io"
 	"reflect"
 	"strconv"
-	"unsafe"
+
+	"github.com/shurcooL/go-goon/bypass"
 )
-
-// reflectValue mirrors the struct layout of the reflect package Value type.
-var reflectValue struct {
-	typ  unsafe.Pointer
-	val  unsafe.Pointer
-	flag uintptr
-}
-
-// flagIndir indicates whether the value field of a reflect.Value is the actual
-// data or a pointer to the data.
-const flagIndir = 1 << 1
-
-// unsafeReflectValue converts the passed reflect.Value into a one that bypasses
-// the typical safety restrictions preventing access to unaddressable and
-// unexported data.  It works by digging the raw pointer to the underlying
-// value out of the protected value and generating a new unprotected (unsafe)
-// reflect.Value to it.
-//
-// This allows us to check for implementations of the Stringer and error
-// interfaces to be used for pretty printing ordinarily unaddressable and
-// inaccessible values such as unexported struct fields.
-func unsafeReflectValue(v reflect.Value) (rv reflect.Value) {
-	indirects := 1
-	vt := v.Type()
-	upv := unsafe.Pointer(uintptr(unsafe.Pointer(&v)) + unsafe.Offsetof(reflectValue.val))
-	rvf := *(*uintptr)(unsafe.Pointer(uintptr(unsafe.Pointer(&v)) + unsafe.Offsetof(reflectValue.flag)))
-	if rvf&flagIndir != 0 {
-		vt = reflect.PtrTo(v.Type())
-		indirects++
-	}
-
-	pv := reflect.NewAt(vt, upv)
-	rv = pv
-	for i := 0; i < indirects; i++ {
-		rv = rv.Elem()
-	}
-	return rv
-}
 
 // Some constants in the form of bytes to avoid string overhead.  This mirrors
 // the technique used in the fmt package.
@@ -112,7 +75,7 @@ func handleMethods(cs *configState, w io.Writer, v reflect.Value) (handled bool)
 	// to enforce visibility rules.  We use unsafe to bypass these restrictions
 	// since this package does not mutate the values.
 	if !v.CanInterface() {
-		v = unsafeReflectValue(v)
+		v = bypass.UnsafeReflectValue(v)
 	}
 
 	// Choose whether or not to do error and Stringer interface lookups against
@@ -124,7 +87,7 @@ func handleMethods(cs *configState, w io.Writer, v reflect.Value) (handled bool)
 	var viface interface{}
 	if !cs.DisablePointerMethods {
 		if !v.CanAddr() {
-			v = unsafeReflectValue(v)
+			v = bypass.UnsafeReflectValue(v)
 		}
 		viface = v.Addr().Interface()
 	} else {

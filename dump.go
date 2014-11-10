@@ -20,6 +20,8 @@ import (
 	// TODO: Replace with "go/format" once Go 1.4 is released.
 	format5551fixed "github.com/shurcooL/go/go/format"
 
+	"github.com/shurcooL/go-goon/bypass"
+
 	"os/exec"
 
 	"path/filepath"
@@ -298,7 +300,7 @@ func (d *dumpState) dump(v reflect.Value) {
 
 	case reflect.Func:
 		if !v.CanInterface() {
-			v = unsafeReflectValue(v)
+			v = bypass.UnsafeReflectValue(v)
 		}
 		d.w.Write([]byte(GetSourceAsString(v.Interface())))
 
