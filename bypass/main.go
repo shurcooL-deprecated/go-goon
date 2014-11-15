@@ -6,6 +6,8 @@ import (
 	"unsafe"
 )
 
+// This code currently matches unexported code in https://github.com/davecgh/go-spew/blob/master/spew/common.go.
+
 const (
 	// ptrSize is the size of a pointer on the current arch.
 	ptrSize = unsafe.Sizeof((*byte)(nil))
