@@ -20,8 +20,6 @@ import (
 	// TODO: Replace with "go/format" once Go 1.4 is released.
 	format5551fixed "github.com/shurcooL/go/go/format"
 
-	"github.com/shurcooL/go-goon/bypass"
-
 	"os/exec"
 
 	"path/filepath"
@@ -299,10 +297,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		printHexPtr(d.w, uintptr(v.Uint()))
 
 	case reflect.Func:
-		if !v.CanInterface() {
-			v = bypass.UnsafeReflectValue(v)
-		}
-		d.w.Write([]byte(GetSourceAsString(v.Interface())))
+		d.w.Write([]byte(GetFuncValueSourceAsString(v)))
 
 	case reflect.UnsafePointer, reflect.Chan:
 		printHexPtr(d.w, v.Pointer())
