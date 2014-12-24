@@ -4,38 +4,16 @@ package goon
 import (
 	"bytes"
 	"fmt"
+	"go/format"
 	"io"
 	"os"
 	"reflect"
-	"runtime"
 	"strconv"
 	"strings"
 
-	"go/ast"
-	"go/format"
-	"go/parser"
-	"go/printer"
-	"go/token"
-
-	// TODO: Replace with "go/format" once Go 1.4 is released.
-	format5551fixed "github.com/shurcooL/go/go/format"
-
-	"os/exec"
-
-	"path/filepath"
-
-	//. "gist.github.com/5258650.git"
-	//"runtime/debug"
-
-	. "github.com/shurcooL/go/gists/gist6418462"
-
-	. "github.com/shurcooL/go/gists/gist6418290"
+	"github.com/shurcooL/go/gists/gist6418290"
+	"github.com/shurcooL/go/gists/gist6418462"
 )
-
-var _ ast.Ident
-
-//var _ = debug.Stack()
-//var _ = GetLines("")
 
 // dumpState contains information about the state of a dump operation.
 type dumpState struct {
@@ -297,7 +275,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		printHexPtr(d.w, uintptr(v.Uint()))
 
 	case reflect.Func:
-		d.w.Write([]byte(GetFuncValueSourceAsString(v)))
+		d.w.Write([]byte(gist6418462.GetFuncValueSourceAsString(v)))
 
 	case reflect.UnsafePointer, reflect.Chan:
 		printHexPtr(d.w, v.Pointer())
@@ -371,7 +349,7 @@ func fdump(cs *configState, w io.Writer, a ...interface{}) {
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&config, &buf, a...)
-	return gofmt5b(buf.Bytes())
+	return gofmt(buf.Bytes())
 }
 
 // Dumps goons to a string.
@@ -413,12 +391,12 @@ func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) 
 func bdumpNamed(names []string, a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdumpNamed(&config, &buf, names, a...)
-	return gofmt5b(buf.Bytes())
+	return gofmt(buf.Bytes())
 }
 
 // Dumps goon expressions to a string.
 func SdumpExpr(a ...interface{}) string {
-	return string(bdumpNamed(GetParentArgExprAllAsString(), a...))
+	return string(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
 }
 
 // Dumps goon expressions to stdout.
@@ -430,85 +408,11 @@ func SdumpExpr(a ...interface{}) string {
 // Will print:
 //	somethingImportant = (int)(5)
 func DumpExpr(a ...interface{}) {
-	os.Stdout.Write(bdumpNamed(GetParentArgExprAllAsString(), a...))
+	os.Stdout.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
 }
 
-// Noop
-func gofmt0(str string) []byte {
-	return []byte(str)
-}
-
-// TODO: Replace with go1.1's go/format
-func gofmt1(str string) []byte {
-	if expr, err := parser.ParseExpr(str); nil == err {
-		var buf bytes.Buffer
-		// This loses the formatting spacing information due to NewFileSet
-		printer.Fprint(&buf, token.NewFileSet(), expr)
-		return buf.Bytes()
-	}
-	return nil
-}
-
-// TODO: Replace with go1.1's go/format
-// Mimics gofmt's default internal behaviour
-func gofmt2(x string) []byte {
-	fset := token.NewFileSet()
-	// Ok I give up basically reimplementing private code of gofmt here, useless work cuz go1.1 will have go/format
-	// So I'll just use gofmt binary for now
-	if file, err := parser.ParseFile(fset, "", "package p; func _() {"+x+"}", parser.ParseComments); nil == err {
-		var buf bytes.Buffer
-		// The following printer.Config tries to mimic the (current) default gofmt behaviour
-		(&printer.Config{Mode: printer.UseSpaces | printer.TabIndent, Tabwidth: 8}).Fprint(&buf, fset, file)
-		buf.Write(newlineBytes)
-		return buf.Bytes()
-	} else {
-		panic(err)
-	}
-	return []byte("gofmt error!\n" + x)
-}
-
-// TODO: Replace with go1.1's go/format
-// Actually executes gofmt binary as a new process
-func gofmt3(str string) []byte {
-	cmd := exec.Command(filepath.Join(runtime.GOROOT(), "bin", "gofmt"))
-
-	// TODO: Error checking and other niceness
-	// http://stackoverflow.com/questions/13432947/exec-external-program-script-and-detect-if-it-requests-user-input
-	in, err := cmd.StdinPipe()
-	if err != nil {
-		panic(err)
-	}
-	go func() {
-		_, err = in.Write([]byte(str))
-		if err != nil {
-			panic(err)
-		}
-		err = in.Close()
-		if err != nil {
-			panic(err)
-		}
-	}()
-
-	data, err := cmd.Output()
-	if nil != err {
-		return []byte("gofmt error!\n" + str)
-	}
-	return data
-}
-
-// TODO: Can't use it until go/format is fixed to be consistent with gofmt, currently it strips comments out of partial Go programs
-// See: https://code.google.com/p/go/issues/detail?id=5551
-func gofmt4(str string) []byte {
-	formattedSrc, err := format.Source([]byte(str))
-	if nil != err {
-		return []byte("gofmt error (" + err.Error() + ")!\n" + str)
-	}
-	return formattedSrc
-}
-
-// TODO: Replace with "go/format" once Go 1.4 is released.
-func gofmt5b(src []byte) []byte {
-	formattedSrc, err := format5551fixed.Source(src)
+func gofmt(src []byte) []byte {
+	formattedSrc, err := format.Source(src)
 	if nil != err {
 		return []byte("gofmt error (" + err.Error() + ")!\n" + string(src))
 	}
