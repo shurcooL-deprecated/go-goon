@@ -1,7 +1,7 @@
 go-goon [![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon)
 =======
 
-go-goon is a deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
+A deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
 
 Installation
 ------------
