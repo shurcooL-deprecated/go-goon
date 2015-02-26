@@ -352,14 +352,19 @@ func bdump(a ...interface{}) []byte {
 	return gofmt(buf.Bytes())
 }
 
+// Dumps goons to stdout.
+func Dump(a ...interface{}) (n int, err error) {
+	return os.Stdout.Write(bdump(a...))
+}
+
 // Dumps goons to a string.
 func Sdump(a ...interface{}) string {
 	return string(bdump(a...))
 }
 
-// Dumps goons to stdout.
-func Dump(a ...interface{}) {
-	os.Stdout.Write(bdump(a...))
+// Fdumps goons to a writer.
+func Fdump(w io.Writer, a ...interface{}) (n int, err error) {
+	return w.Write(bdump(a...))
 }
 
 func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) {
@@ -394,11 +399,6 @@ func bdumpNamed(names []string, a ...interface{}) []byte {
 	return gofmt(buf.Bytes())
 }
 
-// Dumps goon expressions to a string.
-func SdumpExpr(a ...interface{}) string {
-	return string(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
-}
-
 // Dumps goon expressions to stdout.
 //
 // E.g.,
@@ -407,8 +407,18 @@ func SdumpExpr(a ...interface{}) string {
 //
 // Will print:
 //	somethingImportant = (int)(5)
-func DumpExpr(a ...interface{}) {
-	os.Stdout.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
+func DumpExpr(a ...interface{}) (n int, err error) {
+	return os.Stdout.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
+}
+
+// Dumps goon expressions to a string.
+func SdumpExpr(a ...interface{}) string {
+	return string(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
+}
+
+// Dumps goon expressions to a writer.
+func FdumpExpr(w io.Writer, a ...interface{}) (n int, err error) {
+	return w.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
 }
 
 func gofmt(src []byte) []byte {
