@@ -30,15 +30,15 @@ func Example() {
 	goon.Dump(x)
 
 	// Output:
-	//(Lang)(Lang{
-	//	Name: (string)("Go"),
-	//	Year: (int)(2009),
-	//	URL:  (string)("http"),
-	//	Inner: (*Inner)(&Inner{
-	//		Field1: (string)("Secret!"),
-	//		Field2: (int)(0),
-	//	}),
-	//})
+	// (Lang)(Lang{
+	// 	Name: (string)("Go"),
+	// 	Year: (int)(2009),
+	// 	URL:  (string)("http"),
+	// 	Inner: (*Inner)(&Inner{
+	// 		Field1: (string)("Secret!"),
+	// 		Field2: (int)(0),
+	// 	}),
+	// })
 	//
 }
 
@@ -58,11 +58,11 @@ func ExampleUnexported() {
 	goon.Dump(x)
 
 	// Output:
-	//(Lang)(Lang{
-	//	Name: (string)("Go"),
-	//	year: (int)(2009),
-	//	url:  (string)("http"),
-	//})
+	// (Lang)(Lang{
+	// 	Name: (string)("Go"),
+	// 	year: (int)(2009),
+	// 	url:  (string)("http"),
+	// })
 	//
 }
 
@@ -121,49 +121,49 @@ func ExampleComplete() {
 	}
 
 	// Output:
-	//([]int32)([]int32{
-	//	(int32)(1),
-	//	(int32)(5),
-	//	(int32)(8),
-	//})
-	//(*string)(nil)
-	//(interface{})(nil)
-	//([]uint8)([]uint8{
-	//	(uint8)(102),
-	//	(uint8)(111),
-	//	(uint8)(111),
-	//	(uint8)(100),
-	//	(uint8)(98),
-	//	(uint8)(111),
-	//	(uint8)(111),
-	//	(uint8)(104),
-	//	(uint8)(98),
-	//	(uint8)(105),
-	//	(uint8)(110),
-	//	(uint8)(103),
-	//	(uint8)(98),
-	//	(uint8)(111),
-	//	(uint8)(110),
-	//	(uint8)(103),
-	//	(uint8)(115),
-	//	(uint8)(116),
-	//	(uint8)(114),
-	//	(uint8)(105),
-	//	(uint8)(107),
-	//	(uint8)(101),
-	//	(uint8)(49),
-	//	(uint8)(50),
-	//	(uint8)(51),
-	//})
-	//(uintptr)(nil)
-	//(uintptr)(0x7b)
-	//(func())(func() { println("This is a func.") })
-	//(func(int, int) int)(func(a int, b int) int {
-	//	c := a + b
-	//	return c
-	//})
-	//(struct{ unexportedFunc func() string })(struct{ unexportedFunc func() string }{
-	//	unexportedFunc: (func() string)(func() string { return "This is the source of an unexported struct field." }),
-	//})
+	// ([]int32)([]int32{
+	// 	(int32)(1),
+	// 	(int32)(5),
+	// 	(int32)(8),
+	// })
+	// (*string)(nil)
+	// (interface{})(nil)
+	// ([]uint8)([]uint8{
+	// 	(uint8)(102),
+	// 	(uint8)(111),
+	// 	(uint8)(111),
+	// 	(uint8)(100),
+	// 	(uint8)(98),
+	// 	(uint8)(111),
+	// 	(uint8)(111),
+	// 	(uint8)(104),
+	// 	(uint8)(98),
+	// 	(uint8)(105),
+	// 	(uint8)(110),
+	// 	(uint8)(103),
+	// 	(uint8)(98),
+	// 	(uint8)(111),
+	// 	(uint8)(110),
+	// 	(uint8)(103),
+	// 	(uint8)(115),
+	// 	(uint8)(116),
+	// 	(uint8)(114),
+	// 	(uint8)(105),
+	// 	(uint8)(107),
+	// 	(uint8)(101),
+	// 	(uint8)(49),
+	// 	(uint8)(50),
+	// 	(uint8)(51),
+	// })
+	// (uintptr)(nil)
+	// (uintptr)(0x7b)
+	// (func())(func() { println("This is a func.") })
+	// (func(int, int) int)(func(a int, b int) int {
+	// 	c := a + b
+	// 	return c
+	// })
+	// (struct{ unexportedFunc func() string })(struct{ unexportedFunc func() string }{
+	// 	unexportedFunc: (func() string)(func() string { return "This is the source of an unexported struct field." }),
+	// })
 	//
 }

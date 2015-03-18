@@ -26,15 +26,15 @@ x := Lang{
 goon.Dump(x)
 
 // Output:
-//(Lang)(Lang{
-//	Name: (string)("Go"),
-//	Year: (int)(2009),
-//	URL:  (string)("http"),
-//	Inner: (*Inner)(&Inner{
-//		Field1: (string)("Secret!"),
-//		Field2: (int)(0),
-//	}),
-//})
+// (Lang)(Lang{
+// 	Name: (string)("Go"),
+// 	Year: (int)(2009),
+// 	URL:  (string)("http"),
+// 	Inner: (*Inner)(&Inner{
+// 		Field1: (string)("Secret!"),
+// 		Field2: (int)(0),
+// 	}),
+// })
 ```
 
 ```Go
@@ -43,7 +43,7 @@ items := []int{1, 2, 3}
 goon.DumpExpr(len(items))
 
 // Output:
-//len(items) = (int)(3)
+// len(items) = (int)(3)
 ```
 
 ```Go
@@ -55,10 +55,10 @@ adderFunc := func(a int, b int) int {
 goon.DumpExpr(adderFunc)
 
 // Output:
-//adderFunc = (func(int, int) int)(func(a int, b int) int {
-//	c := a + b
-//	return c
-//})
+// adderFunc = (func(int, int) int)(func(a int, b int) int {
+// 	c := a + b
+// 	return c
+// })
 ```
 
 Attribution
