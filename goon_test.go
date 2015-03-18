@@ -167,3 +167,53 @@ func ExampleComplete() {
 	// })
 	//
 }
+
+func ExampleNilSlice() {
+	var x []int = nil
+	var y []int = []int{}
+	var z []int = []int{1}
+
+	goon.Dump(x)
+	goon.Dump(y)
+	goon.Dump(z)
+
+	// Output:
+	// ([]int)(nil)
+	// ([]int)([]int{})
+	// ([]int)([]int{
+	// 	(int)(1),
+	// })
+}
+
+func ExampleNilMap() {
+	var x map[string]int = nil
+	var y map[string]int = map[string]int{}
+	var z map[string]int = map[string]int{"one": 1}
+
+	goon.Dump(x)
+	goon.Dump(y)
+	goon.Dump(z)
+
+	// Output:
+	// (map[string]int)(nil)
+	// (map[string]int)(map[string]int{})
+	// (map[string]int)(map[string]int{
+	// 	(string)("one"): (int)(1),
+	// })
+}
+
+func ExampleArrays() {
+	var x [0]int
+	var y = [...]int{1, 2, 3}
+
+	goon.Dump(x)
+	goon.Dump(y)
+
+	// Output:
+	// ([0]int)([0]int{})
+	// ([3]int)([3]int{
+	// 	(int)(1),
+	// 	(int)(2),
+	// 	(int)(3),
+	// })
+}

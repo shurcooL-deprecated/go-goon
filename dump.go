@@ -168,7 +168,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	case reflect.Complex128:
 		printComplex(d.w, v.Complex(), 64)
 
-	case reflect.Array, reflect.Slice:
+	case reflect.Array:
 		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
@@ -179,6 +179,22 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.depth--
 		d.indent()
 		d.w.Write(closeBraceBytes)
+
+	case reflect.Slice:
+		if v.IsNil() {
+			d.w.Write(nilBytes)
+		} else {
+			d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
+			d.w.Write(openBraceNewlineBytes)
+			d.depth++
+			for i := 0; i < v.Len(); i++ {
+				d.dump(d.unpackValue(v.Index(i)))
+				d.w.Write(commaNewlineBytes)
+			}
+			d.depth--
+			d.indent()
+			d.w.Write(closeBraceBytes)
+		}
 
 	case reflect.String:
 		d.w.Write([]byte(strconv.Quote(v.String())))
@@ -193,10 +209,12 @@ func (d *dumpState) dump(v reflect.Value) {
 		// been handled above.
 
 	case reflect.Map:
-		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
-		d.w.Write(openBraceNewlineBytes)
-		d.depth++
-		{
+		if v.IsNil() {
+			d.w.Write(nilBytes)
+		} else {
+			d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
+			d.w.Write(openBraceNewlineBytes)
+			d.depth++
 			keys := v.MapKeys()
 			for _, key := range keys {
 				d.dump(d.unpackValue(key))
@@ -205,10 +223,10 @@ func (d *dumpState) dump(v reflect.Value) {
 				d.dump(d.unpackValue(v.MapIndex(key)))
 				d.w.Write(commaNewlineBytes)
 			}
+			d.depth--
+			d.indent()
+			d.w.Write(closeBraceBytes)
 		}
-		d.depth--
-		d.indent()
-		d.w.Write(closeBraceBytes)
 
 	case reflect.Struct:
 		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))

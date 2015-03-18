@@ -74,7 +74,7 @@ func ExampleLarge() {
 	// 			List: ([]*ast.Field)([]*ast.Field{
 	// 				(*ast.Field)(&ast.Field{
 	// 					Doc:   (*ast.CommentGroup)(nil),
-	// 					Names: ([]*ast.Ident)([]*ast.Ident{}),
+	// 					Names: ([]*ast.Ident)(nil),
 	// 					Type: (*ast.Ident)(&ast.Ident{
 	// 						NamePos: (token.Pos)(162),
 	// 						Name:    (string)("int"),
