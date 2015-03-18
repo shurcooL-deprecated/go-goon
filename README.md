@@ -64,7 +64,7 @@ goon.DumpExpr(adderFunc)
 Attribution
 -----------
 
-go-goon source was based on the existing source of [go-spew](https://github.com/davecgh/go-spew) by Dave Collins.
+go-goon source was based on the existing source of [go-spew](https://github.com/davecgh/go-spew) by [Dave Collins](https://github.com/davecgh).
 
 License
 -------

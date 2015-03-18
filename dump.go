@@ -22,7 +22,6 @@ type dumpState struct {
 	pointers         map[uintptr]int
 	ignoreNextType   bool
 	ignoreNextIndent bool
-	cs               *configState
 }
 
 // indent performs indentation according to the depth level and cs.Indent
@@ -32,7 +31,7 @@ func (d *dumpState) indent() {
 		d.ignoreNextIndent = false
 		return
 	}
-	d.w.Write(bytes.Repeat([]byte(d.cs.Indent), d.depth))
+	d.w.Write(bytes.Repeat([]byte(config.indent), d.depth))
 }
 
 // unpackValue returns values inside of non-nil interfaces when possible.
@@ -107,13 +106,6 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	}
 }
 
-func isZeroValue(v reflect.Value) bool {
-	if !v.CanInterface() || !reflect.Zero(v.Type()).CanInterface() /* || reflect.Slice == v.Kind()*/ {
-		return false
-	}
-	return reflect.Zero(v.Type()).Interface() == v.Interface()
-}
-
 // dump is the main workhorse for dumping a value.  It uses the passed reflect
 // value to figure out what kind of object we are dealing with and formats it
 // appropriately.  It is a recursive function, however circular data structures
@@ -150,16 +142,6 @@ func (d *dumpState) dump(v reflect.Value) {
 	}
 	d.ignoreNextType = false
 
-	// Call Stringer/error interfaces if they exist and the handle methods flag
-	// is enabled
-	if !d.cs.DisableMethods {
-		if (kind != reflect.Invalid) && (kind != reflect.Interface) {
-			if handled := handleMethods(d.cs, d.w, v); handled {
-				return
-			}
-		}
-	}
-
 	switch kind {
 	case reflect.Invalid:
 		// Do nothing.  We should never get here since invalid has already
@@ -190,14 +172,9 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
-			d.indent()
-			d.w.Write(maxNewlineBytes)
-		} else {
-			for i := 0; i < v.Len(); i++ {
-				d.dump(d.unpackValue(v.Index(i)))
-				d.w.Write(commaNewlineBytes)
-			}
+		for i := 0; i < v.Len(); i++ {
+			d.dump(d.unpackValue(v.Index(i)))
+			d.w.Write(commaNewlineBytes)
 		}
 		d.depth--
 		d.indent()
@@ -219,10 +196,7 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
-			d.indent()
-			d.w.Write(maxNewlineBytes)
-		} else {
+		{
 			keys := v.MapKeys()
 			for _, key := range keys {
 				d.dump(d.unpackValue(key))
@@ -240,31 +214,21 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write([]byte(typeStringWithoutPackagePrefix(v)))
 		d.w.Write(openBraceBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
-			d.indent()
-			d.w.Write(maxNewlineBytes)
-		} else {
+		{
 			vt := v.Type()
 			numFields := v.NumField()
 			if numFields > 0 {
 				d.w.Write(newlineBytes)
 			}
 			for i := 0; i < numFields; i++ {
-				//if !IsZeroValue(d.unpackValue(v.Field(i))) {
-				if true {
-					d.indent()
-					vtf := vt.Field(i)
-					d.w.Write([]byte(vtf.Name))
-					d.w.Write(colonSpaceBytes)
-					d.ignoreNextIndent = true
-					d.dump(d.unpackValue(v.Field(i)))
-					d.w.Write(commaBytes)
-					d.w.Write(newlineBytes)
-					/*d.w.Write([]byte("\t// "))
-					d.w.Write(openParenBytes)
-					d.w.Write([]byte(d.unpackValue(v.Field(i)).Type().String()))
-					d.w.Write(closeParenBytes)*/
-				}
+				d.indent()
+				vtf := vt.Field(i)
+				d.w.Write([]byte(vtf.Name))
+				d.w.Write(colonSpaceBytes)
+				d.ignoreNextIndent = true
+				d.dump(d.unpackValue(v.Field(i)))
+				d.w.Write(commaBytes)
+				d.w.Write(newlineBytes)
 			}
 		}
 		d.depth--
@@ -331,9 +295,9 @@ func typeStringWithoutPackagePrefix(v reflect.Value) string {
 
 // fdump is a helper function to consolidate the logic from the various public
 // methods which take varying writers and config states.
-func fdump(cs *configState, w io.Writer, a ...interface{}) {
+func fdump(w io.Writer, a ...interface{}) {
 	for _, arg := range a {
-		d := dumpState{w: w, cs: cs}
+		d := dumpState{w: w}
 		if arg == nil {
 			d.w.Write(interfaceBytes)
 			d.w.Write(nilParenBytes)
@@ -348,7 +312,7 @@ func fdump(cs *configState, w io.Writer, a ...interface{}) {
 // Dumps to []byte
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
-	fdump(&config, &buf, a...)
+	fdump(&buf, a...)
 	return gofmt(buf.Bytes())
 }
 
@@ -367,9 +331,9 @@ func Fdump(w io.Writer, a ...interface{}) (n int, err error) {
 	return w.Write(bdump(a...))
 }
 
-func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) {
+func fdumpNamed(w io.Writer, names []string, a ...interface{}) {
 	for argIndex, arg := range a {
-		d := dumpState{w: w, cs: cs}
+		d := dumpState{w: w}
 		if argIndex < len(names) {
 			d.w.Write([]byte(names[argIndex]))
 			d.w.Write([]byte(" = "))
@@ -395,7 +359,7 @@ func fdumpNamed(cs *configState, w io.Writer, names []string, a ...interface{}) 
 
 func bdumpNamed(names []string, a ...interface{}) []byte {
 	var buf bytes.Buffer
-	fdumpNamed(&config, &buf, names, a...)
+	fdumpNamed(&buf, names, a...)
 	return gofmt(buf.Bytes())
 }
 
