@@ -1,4 +1,3 @@
-// Package goon is a deep pretty printer with Go-like notation. It implements the goon specification.
 package goon
 
 import (
@@ -6,14 +5,18 @@ import (
 	"fmt"
 	"go/format"
 	"io"
-	"os"
 	"reflect"
 	"strconv"
 	"strings"
 
-	"github.com/shurcooL/go/gists/gist6418290"
 	"github.com/shurcooL/go/gists/gist6418462"
 )
+
+var config = struct {
+	indent string
+}{
+	indent: "\t",
+}
 
 // dumpState contains information about the state of a dump operation.
 type dumpState struct {
@@ -55,7 +58,7 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 	}
 
 	// Keep list of all dereferenced pointers to show later.
-	pointerChain := make([]uintptr, 0)
+	var pointerChain []uintptr
 
 	// Figure out how many levels of indirection there are by dereferencing
 	// pointers and unpacking interfaces down the chain while detecting circular
@@ -131,7 +134,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	}
 
 	// Print type information unless already handled elsewhere.
-	var shouldPrintClosingBr bool = false
+	var shouldPrintClosingBr = false
 	if !d.ignoreNextType {
 		d.indent()
 		d.w.Write(openParenBytes)
@@ -327,26 +330,11 @@ func fdump(w io.Writer, a ...interface{}) {
 	}
 }
 
-// Dumps to []byte
+// bdump dumps to []byte.
 func bdump(a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdump(&buf, a...)
 	return gofmt(buf.Bytes())
-}
-
-// Dumps goons to stdout.
-func Dump(a ...interface{}) (n int, err error) {
-	return os.Stdout.Write(bdump(a...))
-}
-
-// Dumps goons to a string.
-func Sdump(a ...interface{}) string {
-	return string(bdump(a...))
-}
-
-// Fdumps goons to a writer.
-func Fdump(w io.Writer, a ...interface{}) (n int, err error) {
-	return w.Write(bdump(a...))
 }
 
 func fdumpNamed(w io.Writer, names []string, a ...interface{}) {
@@ -379,28 +367,6 @@ func bdumpNamed(names []string, a ...interface{}) []byte {
 	var buf bytes.Buffer
 	fdumpNamed(&buf, names, a...)
 	return gofmt(buf.Bytes())
-}
-
-// Dumps goon expressions to stdout.
-//
-// E.g.,
-//	somethingImportant := 5
-//	DumpExpr(somethingImportant)
-//
-// Will print:
-//	somethingImportant = (int)(5)
-func DumpExpr(a ...interface{}) (n int, err error) {
-	return os.Stdout.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
-}
-
-// Dumps goon expressions to a string.
-func SdumpExpr(a ...interface{}) string {
-	return string(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
-}
-
-// Dumps goon expressions to a writer.
-func FdumpExpr(w io.Writer, a ...interface{}) (n int, err error) {
-	return w.Write(bdumpNamed(gist6418290.GetParentArgExprAllAsString(), a...))
 }
 
 func gofmt(src []byte) []byte {
