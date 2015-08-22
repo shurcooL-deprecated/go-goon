@@ -1,7 +1,6 @@
-goon [![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon)
-=======
+# goon [![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon) [![GoDoc](https://godoc.org/github.com/shurcooL/go-goon?status.svg)](https://godoc.org/github.com/shurcooL/go-goon)
 
-A deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
+Package goon is a deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
 
 Installation
 ------------
