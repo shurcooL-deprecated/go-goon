@@ -42,7 +42,7 @@ func Example() {
 	//
 }
 
-func ExampleUnexported() {
+func Example_unexported() {
 	type Lang struct {
 		Name string
 		year int
@@ -89,7 +89,7 @@ func TestMap(t *testing.T) {
 	}
 }
 
-func ExampleComplete() {
+func Example_complete() {
 	goon.Dump([]int32{1, 5, 8})
 
 	{
@@ -168,7 +168,7 @@ func ExampleComplete() {
 	//
 }
 
-func ExampleNilSlice() {
+func Example_nilSlice() {
 	var x []int = nil
 	var y []int = []int{}
 	var z []int = []int{1}
@@ -185,7 +185,7 @@ func ExampleNilSlice() {
 	// })
 }
 
-func ExampleNilMap() {
+func Example_nilMap() {
 	var x map[string]int = nil
 	var y map[string]int = map[string]int{}
 	var z map[string]int = map[string]int{"one": 1}
@@ -202,7 +202,7 @@ func ExampleNilMap() {
 	// })
 }
 
-func ExampleArrays() {
+func Example_arrays() {
 	var x [0]int
 	var y = [...]int{1, 2, 3}
 

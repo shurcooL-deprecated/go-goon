@@ -11,7 +11,7 @@ import (
 
 func foo(bar int) int { return bar * 2 }
 
-func ExampleLarge() {
+func Example_large() {
 	fset := token.NewFileSet()
 	if file, err := parser.ParseFile(fset, thisGoSourceFile(), nil, 0); nil == err {
 		for _, d := range file.Decls {
