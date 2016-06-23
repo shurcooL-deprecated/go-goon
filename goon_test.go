@@ -1,6 +1,8 @@
 package goon_test
 
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/shurcooL/go-goon"
@@ -216,4 +218,16 @@ func Example_arrays() {
 	// 	(int)(2),
 	// 	(int)(3),
 	// })
+}
+
+func Example_dumpNamed() {
+	somethingImportant := 5
+	goon.DumpExpr(somethingImportant)
+	fmt.Print(goon.SdumpExpr(somethingImportant))
+	goon.FdumpExpr(os.Stdout, somethingImportant)
+
+	// Output:
+	// somethingImportant = (int)(5)
+	// somethingImportant = (int)(5)
+	// somethingImportant = (int)(5)
 }
