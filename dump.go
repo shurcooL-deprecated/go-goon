@@ -93,10 +93,10 @@ func (d *dumpState) dumpPtr(v reflect.Value) {
 
 	// Display dereferenced value.
 	switch {
-	case nilFound == true:
+	case nilFound:
 		d.w.Write(nilBytes)
 
-	case cycleFound == true:
+	case cycleFound:
 		d.w.Write(circularBytes)
 
 	default:
