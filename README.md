@@ -1,4 +1,7 @@
-# goon [![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon) [![GoDoc](https://godoc.org/github.com/shurcooL/go-goon?status.svg)](https://godoc.org/github.com/shurcooL/go-goon)
+goon
+====
+
+[![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon) [![GoDoc](https://godoc.org/github.com/shurcooL/go-goon?status.svg)](https://godoc.org/github.com/shurcooL/go-goon)
 
 Package goon is a deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
 
@@ -59,6 +62,13 @@ goon.DumpExpr(adderFunc)
 // 	return c
 // })
 ```
+
+Directories
+-----------
+
+| Path                                                           | Synopsis                                                                                    |
+|----------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| [bypass](https://godoc.org/github.com/shurcooL/go-goon/bypass) | Package bypass allows bypassing reflect restrictions on accessing unexported struct fields. |
 
 Attribution
 -----------
