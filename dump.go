@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/shurcooL/go/reflectsource"
 )
@@ -141,6 +142,17 @@ func (d *dumpState) dump(v reflect.Value) {
 	}
 	d.ignoreNextType = false
 
+	if v.Type() == timeType {
+		t := v.Interface().(time.Time)
+		switch t.IsZero() {
+		case false:
+			fmt.Fprintf(d.w, "time.Date(%d, %d, %d, %d, %d, %d, %d, time.%s)", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location().String())
+		case true:
+			d.w.Write([]byte("time.Time{}"))
+		}
+		goto AfterKindSwitch
+	}
+
 	switch kind {
 	case reflect.Invalid:
 		// Do nothing.  We should never get here since invalid has already
@@ -271,11 +283,14 @@ func (d *dumpState) dump(v reflect.Value) {
 			fmt.Fprintf(d.w, "%v", v.String())
 		}
 	}
+AfterKindSwitch:
 
 	if shouldPrintClosingBr {
 		d.w.Write(closeParenBytes)
 	}
 }
+
+var timeType = reflect.TypeOf(time.Time{})
 
 func typeStringWithoutPackagePrefix(v reflect.Value) string {
 	//return v.Type().String()[len(v.Type().PkgPath())+1:]		// TODO: Error checking?

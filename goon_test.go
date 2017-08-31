@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/shurcooL/go-goon"
 )
@@ -66,6 +67,17 @@ func Example_unexported() {
 	// 	url:  (string)("http"),
 	// })
 	//
+}
+
+func Example_time() {
+	goon.Dump(time.Date(1, 2, 3, 4, 5, 6, 7, time.UTC))
+	goon.Dump(time.Date(1, 2, 3, 4, 5, 6, 7, time.Local))
+	goon.Dump(time.Time{})
+
+	// Output:
+	// (time.Time)(time.Date(1, 2, 3, 4, 5, 6, 7, time.UTC))
+	// (time.Time)(time.Date(1, 2, 3, 4, 5, 6, 7, time.Local))
+	// (time.Time)(time.Time{})
 }
 
 // Since maps elements are unordered, they may be printed in any order.
