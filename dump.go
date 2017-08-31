@@ -307,12 +307,8 @@ func typeStringWithoutPackagePrefix(v reflect.Value) string {
 	px := v.Type().String()
 	prefix := px[0 : len(px)-len(strings.TrimLeft(px, "*"))] // Split "**main.Lang" -> "**" and "main.Lang"
 	x := px[len(prefix):]
-	if strings.HasPrefix(x, "main.") {
-		x = x[len("main."):]
-	}
-	if strings.HasPrefix(x, "goon_test.") {
-		x = x[len("goon_test."):]
-	}
+	x = strings.TrimPrefix(x, "main.")
+	x = strings.TrimPrefix(x, "goon_test.")
 	return prefix + x
 
 	/*x = string(debug.Stack())//GetLine(string(debug.Stack()), 0)
