@@ -146,7 +146,16 @@ func (d *dumpState) dump(v reflect.Value) {
 		t := v.Interface().(time.Time)
 		switch t.IsZero() {
 		case false:
-			fmt.Fprintf(d.w, "time.Date(%d, %d, %d, %d, %d, %d, %d, time.%s)", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), t.Location().String())
+			var location string
+			switch t.Location() {
+			case time.UTC:
+				location = "time.UTC"
+			case time.Local:
+				location = "time.Local"
+			default:
+				location = fmt.Sprintf("must(time.LoadLocation(%q))", t.Location().String())
+			}
+			fmt.Fprintf(d.w, "time.Date(%d, %d, %d, %d, %d, %d, %d, %s)", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), location)
 		case true:
 			d.w.Write([]byte("time.Time{}"))
 		}
