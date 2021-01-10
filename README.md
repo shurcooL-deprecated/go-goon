@@ -1,15 +1,19 @@
 goon
 ====
 
-[![Build Status](https://travis-ci.org/shurcooL/go-goon.svg?branch=master)](https://travis-ci.org/shurcooL/go-goon) [![GoDoc](https://godoc.org/github.com/shurcooL/go-goon?status.svg)](https://godoc.org/github.com/shurcooL/go-goon)
+[![Go Reference](https://pkg.go.dev/badge/github.com/shurcooL/go-goon.svg)](https://pkg.go.dev/github.com/shurcooL/go-goon)
 
 Package goon is a deep pretty printer with Go-like notation. It implements the [goon](https://github.com/shurcooL/goon) specification.
+
+**Deprecated:** This package is old, incomplete, low code quality, and now unmaintained.
+See [github.com/hexops/valast](https://github.com/hexops/valast) for a newer package that is the closest known direct replacement.
+See the [Alternatives](#alternatives) section for other known entries in this problem space.
 
 Installation
 ------------
 
 ```bash
-go get -u github.com/shurcooL/go-goon
+go get github.com/shurcooL/go-goon
 ```
 
 Examples
@@ -66,9 +70,9 @@ goon.DumpExpr(adderFunc)
 Directories
 -----------
 
-| Path                                                           | Synopsis                                                                                    |
-|----------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| [bypass](https://godoc.org/github.com/shurcooL/go-goon/bypass) | Package bypass allows bypassing reflect restrictions on accessing unexported struct fields. |
+| Path                                                            | Synopsis                                                                                    |
+|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| [bypass](https://pkg.go.dev/github.com/shurcooL/go-goon/bypass) | Package bypass allows bypassing reflect restrictions on accessing unexported struct fields. |
 
 Alternatives
 ------------

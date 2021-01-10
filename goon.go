@@ -1,4 +1,8 @@
 // Package goon is a deep pretty printer with Go-like notation. It implements the goon specification.
+//
+// Deprecated: This package is old, incomplete, low code quality, and now unmaintained.
+// See github.com/hexops/valast for a newer package that is the closest known direct replacement.
+// See the Alternatives section in README.md for other known entries in this problem space.
 package goon
 
 import (

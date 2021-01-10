@@ -1,6 +1,6 @@
+//go:build !js
 // +build !js
 
-// Package bypass allows bypassing reflect restrictions on accessing unexported struct fields.
 package bypass
 
 import (
@@ -8,7 +8,8 @@ import (
 	"unsafe"
 )
 
-// This code currently matches unexported code in https://github.com/davecgh/go-spew/blob/master/spew/common.go.
+// This code used to match unexported code in https://github.com/davecgh/go-spew/blob/master/spew/common.go
+// in 2014 or so.
 
 const (
 	// ptrSize is the size of a pointer on the current arch.
