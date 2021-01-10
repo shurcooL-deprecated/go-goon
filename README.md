@@ -70,6 +70,13 @@ Directories
 |----------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | [bypass](https://godoc.org/github.com/shurcooL/go-goon/bypass) | Package bypass allows bypassing reflect restrictions on accessing unexported struct fields. |
 
+Alternatives
+------------
+
+-	[`go-spew`](https://github.com/davecgh/go-spew) - A deep pretty printer for Go data structures to aid in debugging.
+-	[`valast`](https://github.com/hexops/valast) - Convert Go values to their AST.
+-	[`repr`](https://github.com/alecthomas/repr) - Python's repr() for Go.
+
 Attribution
 -----------
 
